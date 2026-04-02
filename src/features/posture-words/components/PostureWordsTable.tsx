@@ -88,7 +88,7 @@ export function PostureWordsTable({
             <div className="grid gap-4">
               <div className="grid gap-3">
                 <div className="grid gap-1 rounded-[16px] bg-slate-100/80 px-3 py-3">
-                  <Typography.Text className="text-[0.68rem] font-semibold uppercase tracking-[0.14em] text-slate-500">
+                  <Typography.Text className="text-[0.68rem] font-semibold tracking-[0.14em] text-slate-500 uppercase">
                     English
                   </Typography.Text>
                   <Typography.Text className="text-[1rem] font-medium text-slate-900">
@@ -97,7 +97,7 @@ export function PostureWordsTable({
                 </div>
 
                 <div className="grid gap-1 rounded-[16px] bg-slate-100/80 px-3 py-3">
-                  <Typography.Text className="text-[0.68rem] font-semibold uppercase tracking-[0.14em] text-slate-500">
+                  <Typography.Text className="text-[0.68rem] font-semibold tracking-[0.14em] text-slate-500 uppercase">
                     Vietnamese
                   </Typography.Text>
                   <Typography.Text className="text-[1rem] text-slate-900">

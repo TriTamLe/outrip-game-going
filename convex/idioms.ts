@@ -165,7 +165,10 @@ export const backfillStatuses = mutation({
     for (const idiom of idioms) {
       const normalizedStatus = normalizeIdiomStatus(idiom.status)
 
-      if (!idiom.status || !hasSameIdiomStatus(idiom.status, normalizedStatus)) {
+      if (
+        !idiom.status ||
+        !hasSameIdiomStatus(idiom.status, normalizedStatus)
+      ) {
         await ctx.db.patch(idiom._id, {
           status: normalizedStatus,
         })

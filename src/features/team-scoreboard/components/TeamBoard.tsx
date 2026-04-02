@@ -42,10 +42,12 @@ export function TeamBoard({
   const [form] = Form.useForm<ScoreFormValues>()
   const isControl = mode === 'control'
   const isComboControl = isControl && boardVariant === 'control'
+  const controlButtonPressClass = isControl
+    ? 'active:scale-95 transition-transform'
+    : ''
   const variantClasses = {
     default: {
-      card:
-        '!rounded-[28px] shadow-[0_22px_50px_rgba(15,23,42,0.12)]',
+      card: '!rounded-[28px] shadow-[0_22px_50px_rgba(15,23,42,0.12)]',
       content: 'grid gap-6',
       title: '!mb-0 !text-[1.7rem] !font-bold !text-slate-900',
       label: 'text-[0.95rem] text-slate-600',
@@ -56,10 +58,8 @@ export function TeamBoard({
       button: '!h-12 !rounded-2xl !font-bold',
     },
     present: {
-      card:
-        '!rounded-[32px] shadow-[0_28px_70px_rgba(15,23,42,0.14)]',
-      content:
-        'grid min-h-[min(38vh,430px)] gap-5 max-[720px]:min-h-0',
+      card: '!rounded-[32px] shadow-[0_28px_70px_rgba(15,23,42,0.14)]',
+      content: 'grid min-h-[min(38vh,430px)] gap-5 max-[720px]:min-h-0',
       title: '!mb-0 !text-[clamp(2rem,3vw,2.8rem)] !font-bold !text-slate-900',
       label: 'text-base text-slate-600',
       score:
@@ -70,8 +70,7 @@ export function TeamBoard({
       button: '!h-12 !rounded-2xl !font-bold',
     },
     control: {
-      card:
-        '!rounded-[22px] shadow-[0_18px_40px_rgba(15,23,42,0.12)]',
+      card: '!rounded-[22px] shadow-[0_18px_40px_rgba(15,23,42,0.12)]',
       content: 'grid gap-4',
       title: '!mb-0 !text-[1.45rem] !font-bold !text-slate-900',
       label: 'text-[0.88rem] text-slate-600',
@@ -139,17 +138,13 @@ export function TeamBoard({
             {isComboControl && onResetScore ? (
               <Button
                 aria-label={`Reset ${team.name} score`}
-                className="!h-9 !w-9 !rounded-full !border-white/70 !bg-white/76 !text-slate-700 !shadow-none"
+                className={`!h-9 !w-9 !rounded-full !border-white/70 !bg-white/76 !text-slate-700 !shadow-none ${controlButtonPressClass}`}
                 icon={<ReloadOutlined />}
                 loading={resetting}
                 onClick={() => void onResetScore()}
               />
             ) : null}
           </div>
-
-          <Typography.Text className={variantClasses.label}>
-            Current score
-          </Typography.Text>
         </div>
 
         {boardVariant === 'present' ? (
@@ -158,7 +153,9 @@ export function TeamBoard({
               <Statistic
                 className="!text-slate-900"
                 formatter={() => (
-                  <span className={`inline-flex items-end gap-2 font-medium leading-none text-slate-900 ${variantClasses.score}`}>
+                  <span
+                    className={`inline-flex items-end gap-2 leading-none font-medium text-slate-900 ${variantClasses.score}`}
+                  >
                     <span>{team.score ?? 0}</span>
                     <span className="text-[0.36em] leading-none">🌸</span>
                   </span>
@@ -169,7 +166,7 @@ export function TeamBoard({
             </div>
 
             {showMembers ? (
-              <div className="flex min-h-0 flex-[1.32] items-center">
+              <div className="flex min-h-0 flex-2 items-center">
                 <div className="grid max-h-[248px] w-full grid-cols-2 gap-3 overflow-hidden max-[720px]:max-h-none">
                   {team.members.map((member) => (
                     <div
@@ -180,11 +177,11 @@ export function TeamBoard({
                       }`}
                       key={`${team.key}-${member.name}`}
                     >
-                      <div className="text-[0.96rem] font-semibold leading-tight text-slate-900">
+                      <div className="text-lg leading-tight font-semibold text-slate-900">
                         {member.name}
                       </div>
                       {member.role ? (
-                        <div className="pt-0.5 text-[0.68rem] font-semibold uppercase tracking-[0.14em] text-slate-500">
+                        <div className="pt-0.5 text-[0.68rem] font-semibold tracking-[0.14em] text-slate-500 uppercase">
                           {member.role}
                         </div>
                       ) : null}
@@ -200,7 +197,9 @@ export function TeamBoard({
               <Statistic
                 className="!text-slate-900"
                 formatter={() => (
-                  <span className={`inline-flex items-end gap-2 font-medium leading-none text-slate-900 ${variantClasses.score}`}>
+                  <span
+                    className={`inline-flex items-end gap-2 leading-none font-medium text-slate-900 ${variantClasses.score}`}
+                  >
                     <span>{team.score ?? 0}</span>
                     <span className="text-[0.36em] leading-none">🌸</span>
                   </span>
@@ -231,7 +230,7 @@ export function TeamBoard({
 
                     return (
                       <Button
-                        className={`!h-9 !shrink-0 !select-none !rounded-full !px-3 !text-sm !font-semibold !shadow-none ${
+                        className={`!h-9 !shrink-0 !rounded-full !px-3 !text-sm !font-semibold !shadow-none !select-none ${controlButtonPressClass} ${
                           isPositive
                             ? '!border-0 !text-white'
                             : '!border-slate-200 !bg-white/86 !text-slate-900'
@@ -253,7 +252,7 @@ export function TeamBoard({
                 <div className="grid grid-cols-2 gap-3">
                   <Button
                     aria-label="Decrease score"
-                    className="!h-16 !w-full !select-none !rounded-[22px] !border-slate-200 !bg-white/86 !text-slate-900 !shadow-none hover:!border-slate-300 hover:!bg-white hover:!text-slate-950"
+                    className={`!h-16 !w-full !rounded-[22px] !border-slate-200 !bg-white/86 !text-slate-900 !shadow-none !select-none hover:!border-slate-300 hover:!bg-white hover:!text-slate-950 ${controlButtonPressClass}`}
                     icon={<FiMinus className="text-[1.35rem]" />}
                     onClick={() => void onAdjustScore?.(-1)}
                     type="default"
@@ -261,7 +260,7 @@ export function TeamBoard({
 
                   <Button
                     aria-label="Increase score"
-                    className="!h-16 !w-full !select-none !rounded-[22px] !border-0 !text-white !shadow-none"
+                    className={`!h-16 !w-full !rounded-[22px] !border-0 !text-white !shadow-none !select-none ${controlButtonPressClass}`}
                     icon={<FiPlus className="text-[1.35rem]" />}
                     onClick={() => void onAdjustScore?.(1)}
                     style={{ backgroundColor: team.buttonColor }}
@@ -303,7 +302,7 @@ export function TeamBoard({
 
             <Button
               block
-              className={`!border-none !shadow-none ${variantClasses.button}`}
+              className={`!border-none !shadow-none ${variantClasses.button} ${controlButtonPressClass}`}
               htmlType="submit"
               loading={submitting}
               type="primary"

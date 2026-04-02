@@ -1,4 +1,9 @@
-import { mutation, query, type MutationCtx, type QueryCtx } from './_generated/server'
+import {
+  mutation,
+  query,
+  type MutationCtx,
+  type QueryCtx,
+} from './_generated/server'
 import type { Id } from './_generated/dataModel'
 import { v } from 'convex/values'
 import {
@@ -27,7 +32,7 @@ async function upsertPostureGame(
   const nextActiveWordId =
     options.activeWordId === undefined
       ? existing?.activeWordId
-      : options.activeWordId ?? undefined
+      : (options.activeWordId ?? undefined)
   const nextShowMembersOnPresent =
     options.showMembersOnPresent === undefined
       ? existing?.showMembersOnPresent

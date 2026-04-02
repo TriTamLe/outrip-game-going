@@ -31,10 +31,7 @@ export async function adjustTeamScore(
   return delta
 }
 
-export async function resetTeamScore(
-  ctx: MutationCtx,
-  key: TeamKey,
-) {
+export async function resetTeamScore(ctx: MutationCtx, key: TeamKey) {
   const existingTeam = await ctx.db
     .query('teams')
     .withIndex('by_key', (q) => q.eq('key', key))

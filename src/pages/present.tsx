@@ -10,11 +10,7 @@ import { useVienameseGame } from '../features/vienamese-game/hooks/useVienameseG
 
 function PresentPage() {
   const { teams } = useTeamScores()
-  const {
-    activeWord,
-    isPostureActive,
-    showMembersOnPresent,
-  } = usePostureGame()
+  const { activeWord, isPostureActive, showMembersOnPresent } = usePostureGame()
   const { activeRuleGame, activeRule, isRuleMode } = useRuleStatus()
   const {
     isVienameseActive,
@@ -26,9 +22,7 @@ function PresentPage() {
   } = useVienameseGame()
   const markers = getTeamMarkers(teams)
   const activeVienameseTeam =
-    (activeTeam
-      ? teams.find((team) => team.key === activeTeam)
-      : null) ?? null
+    (activeTeam ? teams.find((team) => team.key === activeTeam) : null) ?? null
 
   return (
     <section className="grid min-h-[calc(100svh-72px)] max-[720px]:min-h-0">
@@ -46,7 +40,7 @@ function PresentPage() {
         <>
           <TeamBoardsGrid
             boardVariant="present"
-            className="grid h-full content-stretch gap-6 lg:grid-cols-2 max-[720px]:grid-cols-1"
+            className="grid h-full content-stretch gap-6 max-[720px]:grid-cols-1 lg:grid-cols-2"
             markers={markers}
             mode="display"
             showMembers={showMembersOnPresent}

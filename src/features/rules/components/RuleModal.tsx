@@ -49,7 +49,7 @@ export function RuleModal({
 
   return (
     <Modal
-      className="[&_.ant-modal-content]:!rounded-[24px] [&_.ant-modal-content]:!p-4 [&_.ant-modal-header]:!mb-0 [&_.ant-modal-title]:!text-xl [&_.ant-modal-title]:!font-semibold sm:[&_.ant-modal-content]:!rounded-[28px] sm:[&_.ant-modal-content]:!p-6 sm:[&_.ant-modal-title]:!text-2xl"
+      className="[&_.ant-modal-content]:!rounded-[24px] [&_.ant-modal-content]:!p-4 sm:[&_.ant-modal-content]:!rounded-[28px] sm:[&_.ant-modal-content]:!p-6 [&_.ant-modal-header]:!mb-0 [&_.ant-modal-title]:!text-xl [&_.ant-modal-title]:!font-semibold sm:[&_.ant-modal-title]:!text-2xl"
       width={760}
       okText={rule ? 'Save changes' : 'Add rule'}
       onCancel={onCancel}
@@ -108,7 +108,7 @@ export function RuleModal({
         </Form.Item>
 
         <div className="mt-5 grid gap-3">
-          <Typography.Text className="text-[0.76rem] font-bold uppercase tracking-[0.18em] text-slate-500">
+          <Typography.Text className="text-[0.76rem] font-bold tracking-[0.18em] text-slate-500 uppercase">
             Preview
           </Typography.Text>
           <div className="max-h-[320px] overflow-y-auto rounded-[22px] border border-slate-200/80 bg-slate-50/88 px-4 py-4 sm:px-5 sm:py-5">

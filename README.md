@@ -71,14 +71,14 @@ Các game hiện có trong phần rules:
 
 ## Route
 
-| Route | Mục đích |
-| --- | --- |
-| `/` | Trang chủ, điều hướng nhanh |
-| `/control` | Màn hình điều khiển |
-| `/present` | Màn hình trình chiếu |
-| `/idioms` | Quản lý idioms |
-| `/posture-words` | Quản lý posture words |
-| `/rules` | Quản lý luật chơi |
+| Route            | Mục đích                    |
+| ---------------- | --------------------------- |
+| `/`              | Trang chủ, điều hướng nhanh |
+| `/control`       | Màn hình điều khiển         |
+| `/present`       | Màn hình trình chiếu        |
+| `/idioms`        | Quản lý idioms              |
+| `/posture-words` | Quản lý posture words       |
+| `/rules`         | Quản lý luật chơi           |
 
 ## Data model trên Convex
 
@@ -104,6 +104,22 @@ Các table chính hiện tại:
 - Tailwind CSS v4
 - React Icons
 - React Markdown
+
+## Code quality
+
+Project đã được set up sẵn:
+
+- ESLint flat config với recommended rules cho JavaScript / TypeScript
+- React Hooks rules
+- React Refresh rules cho Vite
+- Tailwind CSS lint rules
+- Prettier + `prettier-plugin-tailwindcss`
+
+Các file config chính:
+
+- `eslint.config.js`
+- `.prettierrc.json`
+- `.prettierignore`
 
 ## Chạy local
 
@@ -147,6 +163,7 @@ http://localhost:3000
 yarn dev
 yarn typecheck
 yarn lint
+yarn format
 yarn build
 yarn convex:dev
 yarn convex:deploy
@@ -206,4 +223,6 @@ convex/
 
 - App yêu cầu `VITE_CONVEX_URL`; nếu thiếu, frontend sẽ báo lỗi và yêu cầu chạy `npx convex dev`
 - `/control` và `/present` được thiết kế cho hai thiết bị / hai màn hình chạy song song
-- `yarn typecheck` là cách kiểm tra chính trong quá trình phát triển
+- `yarn typecheck` là cách kiểm tra type chính trong quá trình phát triển
+- `yarn lint` sẽ fail nếu còn warning
+- `yarn format` sẽ format toàn bộ repo bằng Prettier

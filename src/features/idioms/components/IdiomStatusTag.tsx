@@ -10,7 +10,7 @@ export function IdiomStatusTag({ value }: IdiomStatusTagProps) {
 
   return (
     <Tag
-      className="!mr-0 !rounded-full !px-3 !py-1 !text-[0.7rem] !font-semibold !uppercase !tracking-[0.16em]"
+      className="!mr-0 !rounded-full !px-3 !py-1 !text-[0.7rem] !font-semibold !tracking-[0.16em] !uppercase"
       color={meta.color}
     >
       {meta.label}

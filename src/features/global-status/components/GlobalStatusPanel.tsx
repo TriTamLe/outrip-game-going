@@ -35,9 +35,7 @@ type GlobalStatusPanelProps = {
   embedded?: boolean
 }
 
-function isRuleStatus(
-  status: GlobalStatus,
-): status is Extract<
+function isRuleStatus(status: GlobalStatus): status is Extract<
   GlobalStatus,
   {
     value:

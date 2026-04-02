@@ -27,7 +27,7 @@ export function useRuleStatus() {
     ? ruleMetaByStatus[activeRuleStatus as RuleStatusValue].key
     : null
   const activeRule = activeRuleGame
-    ? rules.find((rule) => rule.game === activeRuleGame) ?? null
+    ? (rules.find((rule) => rule.game === activeRuleGame) ?? null)
     : null
   const isRuleMode = activeRuleGame !== null
 
@@ -42,7 +42,9 @@ export function useRuleStatus() {
         `Unable to toggle rules for ${ruleMetaByKey[game].name} right now.`,
       )
     } finally {
-      setTogglingRuleKey((currentKey) => (currentKey === game ? null : currentKey))
+      setTogglingRuleKey((currentKey) =>
+        currentKey === game ? null : currentKey,
+      )
     }
   }
 

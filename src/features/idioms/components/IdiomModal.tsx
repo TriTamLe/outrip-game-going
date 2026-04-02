@@ -52,7 +52,7 @@ export function IdiomModal({
 
   return (
     <Modal
-      className="[&_.ant-modal-content]:!rounded-[24px] [&_.ant-modal-content]:!p-4 [&_.ant-modal-header]:!mb-0 [&_.ant-modal-title]:!text-xl [&_.ant-modal-title]:!font-semibold sm:[&_.ant-modal-content]:!rounded-[28px] sm:[&_.ant-modal-content]:!p-6 sm:[&_.ant-modal-title]:!text-2xl"
+      className="[&_.ant-modal-content]:!rounded-[24px] [&_.ant-modal-content]:!p-4 sm:[&_.ant-modal-content]:!rounded-[28px] sm:[&_.ant-modal-content]:!p-6 [&_.ant-modal-header]:!mb-0 [&_.ant-modal-title]:!text-xl [&_.ant-modal-title]:!font-semibold sm:[&_.ant-modal-title]:!text-2xl"
       width={720}
       okText={idiom ? 'Save changes' : 'Add idiom'}
       onCancel={onCancel}

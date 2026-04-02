@@ -23,8 +23,10 @@ export function useComboTeamScores() {
   const flushTimersRef = useRef<Partial<Record<TeamKey, FlushTimer>>>({})
 
   useEffect(() => {
+    const flushTimers = flushTimersRef.current
+
     return () => {
-      Object.values(flushTimersRef.current).forEach((timer) => {
+      Object.values(flushTimers).forEach((timer) => {
         if (timer) {
           clearTimeout(timer)
         }

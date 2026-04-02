@@ -34,9 +34,7 @@ export function useVienameseGame() {
   const phase = vienameseStatus?.phase ?? null
   const activeTeam = vienameseStatus?.team ?? null
   const isPaused = Boolean(
-    isVienameseActive &&
-      phase === 'playing' &&
-      state?.pausedAt,
+    isVienameseActive && phase === 'playing' && state?.pausedAt,
   )
 
   const remainingMs = useMemo(() => {

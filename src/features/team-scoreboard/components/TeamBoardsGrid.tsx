@@ -34,7 +34,9 @@ export function TeamBoardsGrid({
           marker={markers[team.key] ?? null}
           mode={mode}
           onAdjustScore={
-            onAdjustScore ? (delta) => onAdjustScore(team.key, delta) : undefined
+            onAdjustScore
+              ? (delta) => onAdjustScore(team.key, delta)
+              : undefined
           }
           showMembers={showMembers}
           submitting={submittingKey === team.key}

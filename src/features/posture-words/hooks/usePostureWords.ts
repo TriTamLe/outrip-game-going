@@ -9,9 +9,9 @@ import type {
 
 export function usePostureWords() {
   const { message } = AntdApp.useApp()
-  const postureWordsQuery = useQuery(
-    api.postureWords.list,
-  ) as PostureWordRecord[] | undefined
+  const postureWordsQuery = useQuery(api.postureWords.list) as
+    | PostureWordRecord[]
+    | undefined
   const createPostureWord = useMutation(api.postureWords.create)
   const updatePostureWord = useMutation(api.postureWords.update)
   const removePostureWord = useMutation(api.postureWords.remove)
@@ -19,8 +19,9 @@ export function usePostureWords() {
     useState<PostureWordRecord | null>(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [isSaving, setIsSaving] = useState(false)
-  const [deletingId, setDeletingId] =
-    useState<PostureWordRecord['_id'] | null>(null)
+  const [deletingId, setDeletingId] = useState<PostureWordRecord['_id'] | null>(
+    null,
+  )
 
   const postureWords = postureWordsQuery ?? []
 

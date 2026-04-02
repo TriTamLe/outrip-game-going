@@ -24,21 +24,21 @@ export function VienamesePresentBoard({
 }: VienamesePresentBoardProps) {
   const scoreBadge = (
     <div className="rounded-[28px] bg-white/80 px-6 py-4 shadow-[0_16px_34px_rgba(148,163,184,0.16)]">
-      <div className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
+      <div className="text-xs font-semibold tracking-[0.18em] text-slate-500 uppercase">
         Score
       </div>
-      <div className="pt-2 text-[clamp(2.8rem,5vw,4.4rem)] font-bold leading-none tracking-[-0.05em] text-slate-950">
-        {totalScore} <span className="text-[0.42em] align-[0.18em]">🌸</span>
+      <div className="pt-2 text-[clamp(2.8rem,5vw,4.4rem)] leading-none font-bold tracking-[-0.05em] text-slate-950">
+        {totalScore} <span className="align-[0.18em] text-[0.42em]">🌸</span>
       </div>
     </div>
   )
 
   const timerBadge = (
     <div className="rounded-[28px] bg-slate-950 px-6 py-4 shadow-[0_18px_36px_rgba(15,23,42,0.2)]">
-      <div className="text-xs font-semibold uppercase tracking-[0.18em] text-white/60">
+      <div className="text-xs font-semibold tracking-[0.18em] text-white/60 uppercase">
         Time
       </div>
-      <div className="pt-2 text-[clamp(2.8rem,5vw,4.4rem)] font-bold leading-none tracking-[0.02em] text-white">
+      <div className="pt-2 text-[clamp(2.8rem,5vw,4.4rem)] leading-none font-bold tracking-[0.02em] text-white">
         {formatVienameseTimer(remainingMs)}
       </div>
     </div>
@@ -64,8 +64,8 @@ export function VienamesePresentBoard({
           </Typography.Title>
 
           {phase === 'waiting' ? (
-            <div className="rounded-full bg-white/76 px-4 py-2 text-sm font-medium text-slate-600 shadow-[0_12px_28px_rgba(148,163,184,0.14)]">
-              Everyone get ready. Start the round from control.
+            <div className="rounded-full bg-white/76 px-4 py-2 text-2xl font-medium text-slate-600 shadow-[0_12px_28px_rgba(148,163,184,0.14)]">
+              Everyone get ready...
             </div>
           ) : null}
 
@@ -76,17 +76,15 @@ export function VienamesePresentBoard({
             </div>
           ) : null}
 
-          {phase === 'ending' ? (
-            <div>{scoreBadge}</div>
-          ) : null}
+          {phase === 'ending' ? <div>{scoreBadge}</div> : null}
         </div>
 
         {phase === 'waiting' ? (
           showMembers ? (
             <div className="grid content-start gap-4">
-              <Typography.Text className="text-sm font-semibold uppercase tracking-[0.16em] text-slate-500">
+              <p className="text-3xl font-semibold tracking-[0.16em] text-slate-500 uppercase">
                 Team Members
-              </Typography.Text>
+              </p>
               <div className="grid grid-cols-2 gap-3 lg:grid-cols-3">
                 {team.members.map((member) => (
                   <div
@@ -97,11 +95,11 @@ export function VienamesePresentBoard({
                     }`}
                     key={`${team.key}-${member.name}`}
                   >
-                    <div className="text-lg font-semibold leading-tight text-slate-900">
+                    <div className="text-2xl leading-tight font-semibold text-slate-900">
                       {member.name}
                     </div>
                     {member.role ? (
-                      <div className="pt-1 text-[0.72rem] font-semibold uppercase tracking-[0.16em] text-slate-500">
+                      <div className="pt-1 text-[0.72rem] font-semibold tracking-[0.16em] text-slate-500 uppercase">
                         {member.role}
                       </div>
                     ) : null}
@@ -133,7 +131,7 @@ export function VienamesePresentBoard({
 
         {phase === 'ending' ? (
           <div className="pointer-events-none absolute inset-0 grid place-items-center text-center">
-            <div className="grid items-center justify-items-center gap-6">
+            <div className="grid place-items-center gap-6">
               <div className="text-[36px] font-semibold tracking-[0.02em] text-slate-600">
                 Congratulations!
               </div>

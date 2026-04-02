@@ -17,7 +17,7 @@ function IndexPage() {
     <section className="grid gap-6">
       <header className="grid gap-6 rounded-[32px] border border-slate-900/8 bg-white/72 p-6 shadow-[0_24px_60px_rgba(148,163,184,0.16)] backdrop-blur-xl lg:grid-cols-[minmax(0,1.6fr)_minmax(280px,1fr)] lg:items-end lg:p-10">
         <div>
-          <Typography.Text className="mb-3.5 inline-block text-[0.8rem] font-bold uppercase tracking-[0.18em] text-slate-600">
+          <Typography.Text className="mb-3.5 inline-block text-[0.8rem] font-bold tracking-[0.18em] text-slate-600 uppercase">
             Team score tracker
           </Typography.Text>
           <Typography.Title
@@ -37,7 +37,7 @@ function IndexPage() {
           <div className="grid gap-3 sm:grid-cols-2">
             <section className="grid gap-4 rounded-[28px] bg-slate-950 p-5 text-white shadow-[0_24px_50px_rgba(15,23,42,0.22)]">
               <div className="grid gap-1.5">
-                <Typography.Text className="!m-0 !text-[0.72rem] !font-bold !uppercase !tracking-[0.18em] !text-sky-200/90">
+                <Typography.Text className="!m-0 !text-[0.72rem] !font-bold !tracking-[0.18em] !text-sky-200/90 !uppercase">
                   Game screens
                 </Typography.Text>
                 <Typography.Title
@@ -73,7 +73,7 @@ function IndexPage() {
 
             <section className="grid gap-4 rounded-[28px] border border-slate-900/8 bg-slate-50/92 p-5 shadow-[0_18px_36px_rgba(148,163,184,0.12)]">
               <div className="grid gap-1.5">
-                <Typography.Text className="!m-0 !text-[0.72rem] !font-bold !uppercase !tracking-[0.18em] !text-slate-500">
+                <Typography.Text className="!m-0 !text-[0.72rem] !font-bold !tracking-[0.18em] !text-slate-500 !uppercase">
                   Data CRUD
                 </Typography.Text>
                 <Typography.Title
@@ -83,7 +83,8 @@ function IndexPage() {
                   Manage game content
                 </Typography.Title>
                 <Typography.Paragraph className="!m-0 !text-sm !leading-6 !text-slate-600">
-                  Edit the source lists for idioms, posture words, and rule sheets.
+                  Edit the source lists for idioms, posture words, and rule
+                  sheets.
                 </Typography.Paragraph>
               </div>
 

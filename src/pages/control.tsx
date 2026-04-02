@@ -17,15 +17,12 @@ import { useVienameseGame } from '../features/vienamese-game/hooks/useVienameseG
 import { ruleGames, ruleMetaByStatus } from '../features/rules/ruleMeta.ts'
 import { useRuleStatus } from '../features/rules/hooks/useRuleStatus.ts'
 
+const RULES_COLLAPSE_KEY = 'rules'
+
 function ControlPage() {
   const navigate = useNavigate()
-  const {
-    teams,
-    comboScores,
-    queueScoreChange,
-    resettingKey,
-    resetScore,
-  } = useComboTeamScores()
+  const { teams, comboScores, queueScoreChange, resettingKey, resetScore } =
+    useComboTeamScores()
   const {
     activeWord,
     words,
@@ -67,12 +64,9 @@ function ControlPage() {
     resume,
     endToIdle,
   } = useVienameseGame()
-  const {
-    activeRuleGame,
-    togglingRuleKey,
-    toggleRule,
-  } = useRuleStatus()
+  const { activeRuleGame, togglingRuleKey, toggleRule } = useRuleStatus()
   const [isAffixed, setIsAffixed] = useState(false)
+  const [openCollapseKeys, setOpenCollapseKeys] = useState<string[]>([])
 
   const isStartingVienamese = startingTeamKey !== null
   const postureToggleDisabled =
@@ -108,9 +102,9 @@ function ControlPage() {
   const markers = getTeamMarkers(teams)
   const ruleCollapseItems = [
     {
-      key: 'rules',
+      key: RULES_COLLAPSE_KEY,
       label: (
-        <span className="text-[0.72rem] font-semibold uppercase tracking-[0.16em] text-slate-600">
+        <span className="text-[0.72rem] font-semibold tracking-[0.16em] text-slate-600 uppercase">
           Show rules
         </span>
       ),
@@ -136,7 +130,18 @@ function ControlPage() {
 
   return (
     <section className="mx-auto grid max-w-[520px] gap-4">
-      <Affix offsetTop={16} onChange={(affixed) => setIsAffixed(Boolean(affixed))}>
+      <Affix
+        offsetTop={16}
+        onChange={(affixed) => {
+          const nextIsAffixed = Boolean(affixed)
+
+          setIsAffixed(nextIsAffixed)
+
+          if (nextIsAffixed) {
+            setOpenCollapseKeys([])
+          }
+        }}
+      >
         <div className="w-full rounded-[24px] border border-slate-900/10 bg-slate-100/88 p-3 shadow-[0_30px_70px_rgba(148,163,184,0.28)] backdrop-blur-xl">
           <div className="grid gap-3">
             <div className="flex items-start justify-between gap-3">
@@ -173,11 +178,16 @@ function ControlPage() {
 
             {!isAffixed ? (
               <Collapse
+                activeKey={openCollapseKeys}
                 bordered={false}
                 className="overflow-hidden rounded-[18px] bg-white/62"
-                defaultActiveKey={['rules']}
                 expandIconPosition="end"
                 items={ruleCollapseItems}
+                onChange={(keys) => {
+                  setOpenCollapseKeys(
+                    Array.isArray(keys) ? keys.map(String) : [String(keys)],
+                  )
+                }}
               />
             ) : null}
 
@@ -189,9 +199,7 @@ function ControlPage() {
                 onClick={() => void togglePostureGame()}
                 type={isPostureActive ? 'default' : 'primary'}
               >
-                {isPostureActive
-                  ? 'Stop Tâm Đầu Ý Hợp'
-                  : 'Start Tâm Đầu Ý Hợp'}
+                {isPostureActive ? 'Stop Tâm Đầu Ý Hợp' : 'Start Tâm Đầu Ý Hợp'}
               </Button>
             ) : null}
           </div>
@@ -216,38 +224,39 @@ function ControlPage() {
             activeTeam === team.key &&
             vienamesePhase !== null
 
-          const footer = isActiveVienameseBoard && vienamesePhase ? (
-            <VienameseControlFooter
-              ending={isEnding}
-              guessing={isGuessing}
-              idiomText={activeIdiom?.text ?? null}
-              forceEnding={isForceEnding}
-              isPaused={isPaused}
-              onEndRound={endRound}
-              onEndToIdle={endToIdle}
-              onGuess={markGuessed}
-              onPass={markPassed}
-              onPauseResume={isPaused ? resume : pause}
-              onStart={beginPlaying}
-              passing={isPassing}
-              pauseLoading={isPausing}
-              phase={vienamesePhase}
-              remainingMs={remainingMs}
-              resumeLoading={isResuming}
-              roundScore={roundScore}
-              startLoading={isBeginning}
-              totalScore={team.score ?? 0}
-            />
-          ) : (
-            <Button
-              className="!h-12 !rounded-2xl !font-semibold"
-              disabled={playTtttDisabled}
-              loading={startingTeamKey === team.key}
-              onClick={() => void startForTeam(team.key)}
-            >
-              Play TTTT
-            </Button>
-          )
+          const footer =
+            isActiveVienameseBoard && vienamesePhase ? (
+              <VienameseControlFooter
+                ending={isEnding}
+                guessing={isGuessing}
+                idiomText={activeIdiom?.text ?? null}
+                forceEnding={isForceEnding}
+                isPaused={isPaused}
+                onEndRound={endRound}
+                onEndToIdle={endToIdle}
+                onGuess={markGuessed}
+                onPass={markPassed}
+                onPauseResume={isPaused ? resume : pause}
+                onStart={beginPlaying}
+                passing={isPassing}
+                pauseLoading={isPausing}
+                phase={vienamesePhase}
+                remainingMs={remainingMs}
+                resumeLoading={isResuming}
+                roundScore={roundScore}
+                startLoading={isBeginning}
+                totalScore={team.score ?? 0}
+              />
+            ) : (
+              <Button
+                className="!h-12 !rounded-2xl !font-semibold"
+                disabled={playTtttDisabled}
+                loading={startingTeamKey === team.key}
+                onClick={() => void startForTeam(team.key)}
+              >
+                Play TTTT
+              </Button>
+            )
 
           return (
             <TeamBoard

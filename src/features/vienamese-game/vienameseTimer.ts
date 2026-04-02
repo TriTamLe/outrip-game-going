@@ -14,8 +14,7 @@ export function getRemainingVienameseTime(
   }
 
   const effectiveNow = state.pausedAt ?? now
-  const elapsedMs =
-    effectiveNow - state.startedAt - state.accumulatedPausedMs
+  const elapsedMs = effectiveNow - state.startedAt - state.accumulatedPausedMs
 
   return Math.max(state.durationMs - elapsedMs, 0)
 }

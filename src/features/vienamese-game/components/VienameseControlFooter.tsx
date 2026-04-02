@@ -78,7 +78,7 @@ export function VienameseControlFooter({
       <div className="grid gap-3">
         <div className="grid gap-2 rounded-[20px] border border-slate-900/8 bg-white/78 px-4 py-4">
           <div className="flex items-center justify-between gap-3">
-            <Typography.Text className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-500">
+            <Typography.Text className="text-xs font-semibold tracking-[0.16em] text-slate-500 uppercase">
               Current idiom
             </Typography.Text>
             <span className="rounded-full bg-slate-950 px-3 py-1 text-sm font-semibold tracking-[0.14em] text-white">
@@ -143,7 +143,7 @@ export function VienameseControlFooter({
   return (
     <div className="grid gap-3">
       <div className="grid gap-1 rounded-[20px] border border-slate-900/8 bg-white/78 px-4 py-4">
-        <Typography.Text className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-500">
+        <Typography.Text className="text-xs font-semibold tracking-[0.16em] text-slate-500 uppercase">
           Round finished
         </Typography.Text>
         <Typography.Title className="!mb-0 !text-lg !text-slate-900" level={4}>

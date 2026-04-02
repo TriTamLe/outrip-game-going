@@ -40,7 +40,7 @@ function IdiomsPage() {
     <section className="grid gap-4 sm:gap-6">
       <header className="grid gap-5 rounded-[24px] border border-slate-900/8 bg-white/72 p-5 shadow-[0_20px_50px_rgba(148,163,184,0.16)] backdrop-blur-xl sm:rounded-[32px] sm:p-[clamp(24px,4vw,40px)] lg:grid-cols-[minmax(0,1.6fr)_auto] lg:items-end">
         <div>
-          <Typography.Text className="mb-3.5 inline-block text-[0.8rem] font-bold uppercase tracking-[0.18em] text-slate-600">
+          <Typography.Text className="mb-3.5 inline-block text-[0.8rem] font-bold tracking-[0.18em] text-slate-600 uppercase">
             Idiom library
           </Typography.Text>
           <Typography.Title
@@ -95,7 +95,7 @@ function IdiomsPage() {
       >
         <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end">
           <div className="grid gap-2">
-            <Typography.Text className="text-[0.78rem] font-bold uppercase tracking-[0.18em] text-slate-500">
+            <Typography.Text className="text-[0.78rem] font-bold tracking-[0.18em] text-slate-500 uppercase">
               Tiếng Tây Tiếng Ta
             </Typography.Text>
             <Typography.Title

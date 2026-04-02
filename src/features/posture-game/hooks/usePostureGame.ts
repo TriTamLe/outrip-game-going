@@ -66,7 +66,9 @@ export function usePostureGame() {
       await toggleMembersOnPresentMutation({})
     } catch (error) {
       console.error(error)
-      void message.error('Unable to update present member visibility right now.')
+      void message.error(
+        'Unable to update present member visibility right now.',
+      )
     } finally {
       setIsTogglingMembers(false)
     }

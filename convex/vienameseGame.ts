@@ -1,4 +1,9 @@
-import { mutation, query, type MutationCtx, type QueryCtx } from './_generated/server'
+import {
+  mutation,
+  query,
+  type MutationCtx,
+  type QueryCtx,
+} from './_generated/server'
 import type { Doc, Id } from './_generated/dataModel'
 import { v } from 'convex/values'
 import {
@@ -128,8 +133,7 @@ function calculateRemainingMs(
   }
 
   const effectiveNow = state.pausedAt ?? now
-  const elapsedMs =
-    effectiveNow - state.startedAt - state.accumulatedPausedMs
+  const elapsedMs = effectiveNow - state.startedAt - state.accumulatedPausedMs
 
   return Math.max(state.durationMs - elapsedMs, 0)
 }
@@ -150,10 +154,7 @@ async function pickRandomEligibleIdiom(
       team,
     )
 
-    return (
-      teamStatus === 'not-displayed' ||
-      teamStatus === 'passed'
-    )
+    return teamStatus === 'not-displayed' || teamStatus === 'passed'
   })
 
   if (eligibleIdioms.length === 0) {

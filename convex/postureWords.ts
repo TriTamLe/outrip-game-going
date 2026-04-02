@@ -34,10 +34,7 @@ export const seed = mutation({
         .unique()
 
       if (existing) {
-        if (
-          existing.order !== order ||
-          existing.vietnamese !== vietnamese
-        ) {
+        if (existing.order !== order || existing.vietnamese !== vietnamese) {
           await ctx.db.patch(existing._id, {
             vietnamese,
             order,

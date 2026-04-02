@@ -1,4 +1,9 @@
-import { mutation, query, type MutationCtx, type QueryCtx } from './_generated/server'
+import {
+  mutation,
+  query,
+  type MutationCtx,
+  type QueryCtx,
+} from './_generated/server'
 import { v } from 'convex/values'
 import { ruleGameValidator, type RuleGame } from './rules'
 import { teamValidator, type TeamKey } from './team'
@@ -200,7 +205,4 @@ export const toggleRule = mutation({
   },
 })
 
-export {
-  getStoredGlobalStatus,
-  upsertGlobalStatus,
-}
+export { getStoredGlobalStatus, upsertGlobalStatus }

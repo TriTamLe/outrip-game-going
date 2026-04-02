@@ -28,7 +28,7 @@ export function InGamePostureModule({
   return (
     <section className="grid gap-4 rounded-[28px] border border-slate-900/8 bg-white/84 p-5 shadow-[0_20px_40px_rgba(148,163,184,0.14)] backdrop-blur-xl">
       <div className="grid gap-1">
-        <Typography.Text className="!m-0 !text-[0.72rem] !font-bold !uppercase !tracking-[0.18em] !text-slate-500">
+        <Typography.Text className="!m-0 !text-[0.72rem] !font-bold !tracking-[0.18em] !text-slate-500 !uppercase">
           In-Game Posture
         </Typography.Text>
         <div className="flex flex-wrap items-center justify-between gap-2">
@@ -48,7 +48,7 @@ export function InGamePostureModule({
 
       <div className="grid gap-4">
         <div className="grid gap-2.5">
-          <Typography.Text className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-500">
+          <Typography.Text className="text-xs font-semibold tracking-[0.16em] text-slate-500 uppercase">
             Active Word
           </Typography.Text>
           <button
@@ -63,7 +63,7 @@ export function InGamePostureModule({
           >
             {activeWord ? (
               <div className="grid content-center gap-0.5 self-stretch">
-                <span className="text-[1.02rem] font-semibold leading-tight text-white">
+                <span className="text-[1.02rem] leading-tight font-semibold text-white">
                   {activeWord.english}
                 </span>
                 <span className="text-xs text-white/72">
@@ -84,35 +84,35 @@ export function InGamePostureModule({
         </div>
 
         <div className="grid gap-2.5">
-          <Typography.Text className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-500">
+          <Typography.Text className="text-xs font-semibold tracking-[0.16em] text-slate-500 uppercase">
             List Word
           </Typography.Text>
           <div className="max-h-[320px] overflow-y-auto overscroll-y-contain pr-1">
-            <div className="grid gap-3 grid-cols-2">
-            {words.map((word) => {
-              const isActive = activeWord?._id === word._id
+            <div className="grid grid-cols-2 gap-3">
+              {words.map((word) => {
+                const isActive = activeWord?._id === word._id
 
-              return (
-                <button
-                  className={`grid min-h-[88px] rounded-[20px] border px-3.5 py-3 text-left transition ${
-                    isActive
-                      ? 'border-slate-300 bg-slate-100 shadow-[inset_0_1px_0_rgba(255,255,255,0.45)]'
-                      : 'border-slate-200 bg-white/90 hover:border-slate-300 hover:bg-white'
-                  }`}
-                  disabled={disabled}
-                  key={word._id}
-                  onClick={() => void onSelectWord(word._id)}
-                  type="button"
-                >
-                  <span className="text-base font-semibold leading-tight text-slate-900">
-                    {word.english}
-                  </span>
-                  <span className="pt-0.5 text-xs text-slate-500">
-                    {word.vietnamese}
-                  </span>
-                </button>
-              )
-            })}
+                return (
+                  <button
+                    className={`grid min-h-[88px] rounded-[20px] border px-3.5 py-3 text-left transition active:scale-90 ${
+                      isActive
+                        ? 'border-slate-300 bg-slate-100 shadow-[inset_0_1px_0_rgba(255,255,255,0.45)]'
+                        : 'border-slate-200 bg-white/90 hover:border-slate-300 hover:bg-white'
+                    }`}
+                    disabled={disabled}
+                    key={word._id}
+                    onClick={() => void onSelectWord(word._id)}
+                    type="button"
+                  >
+                    <span className="text-base leading-tight font-semibold text-slate-900">
+                      {word.english}
+                    </span>
+                    <span className="pt-0.5 text-xs text-slate-500">
+                      {word.vietnamese}
+                    </span>
+                  </button>
+                )
+              })}
             </div>
           </div>
         </div>

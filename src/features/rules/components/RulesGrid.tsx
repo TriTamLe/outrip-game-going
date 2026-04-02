@@ -35,7 +35,7 @@ export function RulesGrid({
           key={rule._id}
         >
           <div className="grid gap-2">
-            <Typography.Text className="text-[0.72rem] font-bold uppercase tracking-[0.18em] text-slate-500">
+            <Typography.Text className="text-[0.72rem] font-bold tracking-[0.18em] text-slate-500 uppercase">
               Game rule
             </Typography.Text>
             <Typography.Title

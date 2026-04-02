@@ -26,7 +26,7 @@ export function IdiomsTable({
       key: 'text',
       width: 420,
       render: (text: string) => (
-        <Typography.Text className="whitespace-pre-wrap text-[0.98rem] text-slate-900">
+        <Typography.Text className="text-[0.98rem] whitespace-pre-wrap text-slate-900">
           {text}
         </Typography.Text>
       ),
@@ -84,7 +84,7 @@ export function IdiomsTable({
             key={record._id}
           >
             <div className="grid gap-4">
-              <Typography.Text className="whitespace-pre-wrap text-[1rem] leading-7 text-slate-900">
+              <Typography.Text className="text-[1rem] leading-7 whitespace-pre-wrap text-slate-900">
                 {record.text}
               </Typography.Text>
 
@@ -94,7 +94,7 @@ export function IdiomsTable({
                     className="grid gap-1 rounded-[16px] bg-slate-100/80 px-3 py-2"
                     key={team.key}
                   >
-                    <Typography.Text className="text-[0.68rem] font-semibold uppercase tracking-[0.14em] text-slate-500">
+                    <Typography.Text className="text-[0.68rem] font-semibold tracking-[0.14em] text-slate-500 uppercase">
                       {team.name}
                     </Typography.Text>
                     <IdiomStatusTag value={record.status[team.key]} />

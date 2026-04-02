@@ -1,10 +1,10 @@
-import ReactMarkdown from 'react-markdown';
+import ReactMarkdown from 'react-markdown'
 
 type RuleMarkdownProps = {
-  markdown?: string | null;
-  variant?: 'present' | 'manage';
-  emptyText?: string;
-};
+  markdown?: string | null
+  variant?: 'present' | 'manage'
+  emptyText?: string
+}
 
 const variantClasses = {
   present: {
@@ -22,17 +22,17 @@ const variantClasses = {
     h3: 'text-lg font-semibold leading-tight text-slate-950 sm:text-xl',
     list: 'space-y-1.5',
   },
-} as const;
+} as const
 
 export function RuleMarkdown({
   markdown = null,
   variant = 'manage',
   emptyText = 'No rule has been added yet for this game.',
 }: RuleMarkdownProps) {
-  const classes = variantClasses[variant];
+  const classes = variantClasses[variant]
 
   if (!markdown?.trim()) {
-    return <div className='text-sm leading-7 text-slate-500'>{emptyText}</div>;
+    return <div className="text-sm leading-7 text-slate-500">{emptyText}</div>
   }
 
   return (
@@ -51,12 +51,12 @@ export function RuleMarkdown({
           ),
           li: ({ children }) => <li>{children}</li>,
           strong: ({ children }) => (
-            <strong className='font-semibold text-slate-950'>{children}</strong>
+            <strong className="font-semibold text-slate-950">{children}</strong>
           ),
-          em: ({ children }) => <em className='italic'>{children}</em>,
-          hr: () => <hr className='border-slate-300/80' />,
+          em: ({ children }) => <em className="italic">{children}</em>,
+          hr: () => <hr className="border-slate-300/80" />,
           blockquote: ({ children }) => (
-            <blockquote className='border-l-4 border-slate-300 pl-4 italic text-slate-600'>
+            <blockquote className="border-l-4 border-slate-300 pl-4 text-slate-600 italic">
               {children}
             </blockquote>
           ),
@@ -65,5 +65,5 @@ export function RuleMarkdown({
         {markdown}
       </ReactMarkdown>
     </div>
-  );
+  )
 }
