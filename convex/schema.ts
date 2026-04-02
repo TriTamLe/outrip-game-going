@@ -2,6 +2,7 @@ import { defineSchema, defineTable } from 'convex/server'
 import { v } from 'convex/values'
 import { globalStatusValidator } from './globalStatus'
 import { idiomStatusValidator } from './idiomStatus'
+import { ruleGameValidator } from './rules'
 import { teamValidator } from './team'
 
 export default defineSchema({
@@ -16,6 +17,10 @@ export default defineSchema({
   })
     .index('by_text', ['text'])
     .index('by_order', ['order']),
+  rules: defineTable({
+    game: ruleGameValidator,
+    markdown: v.string(),
+  }).index('by_game', ['game']),
   postureWords: defineTable({
     english: v.string(),
     vietnamese: v.string(),

@@ -1,6 +1,7 @@
 import {
   ArrowRightOutlined,
   BookOutlined,
+  FileTextOutlined,
   TranslationOutlined,
 } from '@ant-design/icons'
 import { useNavigate } from '@tanstack/react-router'
@@ -82,7 +83,7 @@ function IndexPage() {
                   Manage game content
                 </Typography.Title>
                 <Typography.Paragraph className="!m-0 !text-sm !leading-6 !text-slate-600">
-                  Edit the source lists for idioms and posture words.
+                  Edit the source lists for idioms, posture words, and rule sheets.
                 </Typography.Paragraph>
               </div>
 
@@ -102,6 +103,14 @@ function IndexPage() {
                   size="large"
                 >
                   Open posture words
+                </Button>
+                <Button
+                  className="!h-12 !rounded-2xl !border-slate-200 !bg-white !px-5 !font-semibold !text-slate-800 hover:!border-slate-300 hover:!text-slate-950"
+                  icon={<FileTextOutlined />}
+                  onClick={() => void navigate({ to: '/rules' })}
+                  size="large"
+                >
+                  Open rules
                 </Button>
               </div>
             </section>

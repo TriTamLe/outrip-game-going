@@ -1,5 +1,7 @@
 import { PosturePresentOverlay } from '../features/posture-game/components/PosturePresentOverlay.tsx'
 import { usePostureGame } from '../features/posture-game/hooks/usePostureGame.ts'
+import { RulePresentOverlay } from '../features/rules/components/RulePresentOverlay.tsx'
+import { useRuleStatus } from '../features/rules/hooks/useRuleStatus.ts'
 import { TeamBoardsGrid } from '../features/team-scoreboard/components/TeamBoardsGrid.tsx'
 import { getTeamMarkers } from '../features/team-scoreboard/getTeamMarkers.ts'
 import { useTeamScores } from '../features/team-scoreboard/hooks/useTeamScores.ts'
@@ -13,6 +15,7 @@ function PresentPage() {
     isPostureActive,
     showMembersOnPresent,
   } = usePostureGame()
+  const { activeRuleGame, activeRule, isRuleMode } = useRuleStatus()
   const {
     isVienameseActive,
     activeTeam,
@@ -52,6 +55,13 @@ function PresentPage() {
 
           {isPostureActive && activeWord ? (
             <PosturePresentOverlay word={activeWord} />
+          ) : null}
+
+          {isRuleMode && activeRuleGame ? (
+            <RulePresentOverlay
+              game={activeRuleGame}
+              markdown={activeRule?.markdown ?? null}
+            />
           ) : null}
         </>
       )}

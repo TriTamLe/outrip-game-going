@@ -1,11 +1,16 @@
 import { Tag, Typography } from 'antd'
 import { useQuery } from 'convex/react'
 import { api } from '../../../../convex/_generated/api.js'
+import type { GlobalStatus } from '../../../../convex/globalStatus.ts'
 import { teamMeta } from '../../team-scoreboard/teamMeta.ts'
 
 const gameLabels = {
   'in-game:posture': 'Tâm Đầu Ý Hợp',
   'in-game:vienamese': 'Tiếng Tây Tiếng Ta',
+  'rule:posture': 'Rule · Tâm Đầu Ý Hợp',
+  'rule:vienamese': 'Rule · Tiếng Tây Tiếng Ta',
+  'rule:async-battle': 'Rule · Cuộc đấu Bất đồng bộ',
+  'rule:kind-hunt': 'Rule · Cuộc đi săn đầy yêu thương',
 } as const
 
 const phaseLabels = {
@@ -30,6 +35,21 @@ type GlobalStatusPanelProps = {
   embedded?: boolean
 }
 
+function isRuleStatus(
+  status: GlobalStatus,
+): status is Extract<
+  GlobalStatus,
+  {
+    value:
+      | 'rule:posture'
+      | 'rule:vienamese'
+      | 'rule:async-battle'
+      | 'rule:kind-hunt'
+  }
+> {
+  return status.value.startsWith('rule:')
+}
+
 export function GlobalStatusPanel({
   embedded = false,
 }: GlobalStatusPanelProps) {
@@ -49,6 +69,7 @@ export function GlobalStatusPanel({
   }
 
   const isIdle = status.value === 'idle'
+  const isRule = !isIdle && isRuleStatus(status)
 
   return (
     <section className={panelClassName}>
@@ -63,6 +84,10 @@ export function GlobalStatusPanel({
         {isIdle ? (
           <Typography.Text className="text-sm text-slate-600">
             The app is currently waiting to start a game.
+          </Typography.Text>
+        ) : isRule ? (
+          <Typography.Text className="text-sm text-slate-600">
+            The presentation screen is showing the rule sheet.
           </Typography.Text>
         ) : (
           <div className="flex flex-wrap gap-2">

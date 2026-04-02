@@ -1,10 +1,11 @@
 import {
+  BookOutlined,
   HomeOutlined,
   EyeInvisibleOutlined,
   EyeOutlined,
 } from '@ant-design/icons'
 import { useNavigate } from '@tanstack/react-router'
-import { Affix, Button } from 'antd'
+import { Affix, Button, Collapse } from 'antd'
 import { useState } from 'react'
 import { InGamePostureModule } from '../features/posture-game/components/InGamePostureModule.tsx'
 import { usePostureGame } from '../features/posture-game/hooks/usePostureGame.ts'
@@ -13,6 +14,8 @@ import { getTeamMarkers } from '../features/team-scoreboard/getTeamMarkers.ts'
 import { useComboTeamScores } from '../features/team-scoreboard/hooks/useComboTeamScores.ts'
 import { VienameseControlFooter } from '../features/vienamese-game/components/VienameseControlFooter.tsx'
 import { useVienameseGame } from '../features/vienamese-game/hooks/useVienameseGame.ts'
+import { ruleGames, ruleMetaByStatus } from '../features/rules/ruleMeta.ts'
+import { useRuleStatus } from '../features/rules/hooks/useRuleStatus.ts'
 
 function ControlPage() {
   const navigate = useNavigate()
@@ -64,27 +67,72 @@ function ControlPage() {
     resume,
     endToIdle,
   } = useVienameseGame()
+  const {
+    activeRuleGame,
+    togglingRuleKey,
+    toggleRule,
+  } = useRuleStatus()
   const [isAffixed, setIsAffixed] = useState(false)
 
   const isStartingVienamese = startingTeamKey !== null
   const postureToggleDisabled =
     status === undefined ||
-    status.value === 'in-game:vienamese' ||
+    (status.value !== 'idle' && status.value !== 'in-game:posture') ||
     isStartingVienamese
+  const ruleButtonsDisabled =
+    status === undefined ||
+    status.value === 'in-game:posture' ||
+    status.value === 'in-game:vienamese'
   const playTtttDisabled =
     status === undefined ||
     status.value !== 'idle' ||
     isStartingVienamese ||
     isToggling
-  const statusPillText =
-    status === undefined
-      ? 'Loading...'
-      : status.value === 'idle'
-        ? 'Idle'
+  const activeRuleStatus =
+    status &&
+    (status.value === 'rule:posture' ||
+      status.value === 'rule:vienamese' ||
+      status.value === 'rule:async-battle' ||
+      status.value === 'rule:kind-hunt')
+      ? status.value
+      : null
+  const statusPillText = !status
+    ? 'Loading...'
+    : status.value === 'idle'
+      ? 'Idle'
+      : activeRuleStatus
+        ? `Rule · ${ruleMetaByStatus[activeRuleStatus].name}`
         : status.value === 'in-game:posture'
           ? 'In-game · Tâm Đầu Ý Hợp'
           : 'In-game · Tiếng Tây Tiếng Ta'
   const markers = getTeamMarkers(teams)
+  const ruleCollapseItems = [
+    {
+      key: 'rules',
+      label: (
+        <span className="text-[0.72rem] font-semibold uppercase tracking-[0.16em] text-slate-600">
+          Show rules
+        </span>
+      ),
+      children: (
+        <div className="grid gap-2 pt-1 sm:grid-cols-2">
+          {ruleGames.map((ruleGame) => (
+            <Button
+              className="!h-10 !rounded-2xl !font-medium"
+              disabled={ruleButtonsDisabled}
+              icon={<BookOutlined />}
+              key={ruleGame.key}
+              loading={togglingRuleKey === ruleGame.key}
+              onClick={() => void toggleRule(ruleGame.key)}
+              type={activeRuleGame === ruleGame.key ? 'primary' : 'default'}
+            >
+              {ruleGame.name}
+            </Button>
+          ))}
+        </div>
+      ),
+    },
+  ]
 
   return (
     <section className="mx-auto grid max-w-[520px] gap-4">
@@ -122,6 +170,16 @@ function ControlPage() {
                 />
               </div>
             </div>
+
+            {!isAffixed ? (
+              <Collapse
+                bordered={false}
+                className="overflow-hidden rounded-[18px] bg-white/62"
+                defaultActiveKey={['rules']}
+                expandIconPosition="end"
+                items={ruleCollapseItems}
+              />
+            ) : null}
 
             {!isAffixed ? (
               <Button

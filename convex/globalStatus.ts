@@ -1,10 +1,15 @@
 import { mutation, query, type MutationCtx, type QueryCtx } from './_generated/server'
 import { v } from 'convex/values'
+import { ruleGameValidator, type RuleGame } from './rules'
 import { teamValidator, type TeamKey } from './team'
 
 export const globalGameValidator = v.union(
   v.literal('in-game:posture'),
   v.literal('in-game:vienamese'),
+  v.literal('rule:posture'),
+  v.literal('rule:vienamese'),
+  v.literal('rule:async-battle'),
+  v.literal('rule:kind-hunt'),
 )
 
 export const postureGamePhaseValidator = v.union(
@@ -19,9 +24,28 @@ export const vienameseGamePhaseValidator = v.union(
   v.literal('ending'),
 )
 
+export const ruleStatusValidator = v.union(
+  v.literal('rule:posture'),
+  v.literal('rule:vienamese'),
+  v.literal('rule:async-battle'),
+  v.literal('rule:kind-hunt'),
+)
+
 export const globalStatusValidator = v.union(
   v.object({
     value: v.literal('idle'),
+  }),
+  v.object({
+    value: v.literal('rule:posture'),
+  }),
+  v.object({
+    value: v.literal('rule:vienamese'),
+  }),
+  v.object({
+    value: v.literal('rule:async-battle'),
+  }),
+  v.object({
+    value: v.literal('rule:kind-hunt'),
   }),
   v.object({
     value: v.literal('in-game:posture'),
@@ -36,13 +60,36 @@ export const globalStatusValidator = v.union(
 
 export const globalStatusKey = 'global'
 
-export type GlobalGame = 'in-game:posture' | 'in-game:vienamese'
+export type GlobalGame =
+  | 'in-game:posture'
+  | 'in-game:vienamese'
+  | 'rule:posture'
+  | 'rule:vienamese'
+  | 'rule:async-battle'
+  | 'rule:kind-hunt'
 export type PostureGamePhase = 'waiting' | 'playing' | 'result'
 export type VienameseGamePhase = 'waiting' | 'playing' | 'ending'
+export type RuleStatusValue =
+  | 'rule:posture'
+  | 'rule:vienamese'
+  | 'rule:async-battle'
+  | 'rule:kind-hunt'
 
 export type GlobalStatus =
   | {
       value: 'idle'
+    }
+  | {
+      value: 'rule:posture'
+    }
+  | {
+      value: 'rule:vienamese'
+    }
+  | {
+      value: 'rule:async-battle'
+    }
+  | {
+      value: 'rule:kind-hunt'
     }
   | {
       value: 'in-game:posture'
@@ -57,6 +104,19 @@ export type GlobalStatus =
 export function createIdleGlobalStatus(): GlobalStatus {
   return {
     value: 'idle',
+  }
+}
+
+export function createRuleGlobalStatus(game: RuleGame): GlobalStatus {
+  return {
+    value:
+      game === 'posture'
+        ? 'rule:posture'
+        : game === 'vienamese'
+          ? 'rule:vienamese'
+          : game === 'async-battle'
+            ? 'rule:async-battle'
+            : 'rule:kind-hunt',
   }
 }
 
@@ -113,6 +173,30 @@ export const setInGame = mutation({
   },
   handler: async (ctx, { status }) => {
     return await upsertGlobalStatus(ctx, status)
+  },
+})
+
+export const toggleRule = mutation({
+  args: {
+    game: ruleGameValidator,
+  },
+  handler: async (ctx, { game }) => {
+    const currentStatus =
+      (await getStoredGlobalStatus(ctx))?.current ?? createIdleGlobalStatus()
+    const nextRuleStatus = createRuleGlobalStatus(game)
+
+    if (
+      currentStatus.value === 'in-game:posture' ||
+      currentStatus.value === 'in-game:vienamese'
+    ) {
+      throw new Error('A game is already active.')
+    }
+
+    if (currentStatus.value === nextRuleStatus.value) {
+      return await upsertGlobalStatus(ctx, createIdleGlobalStatus())
+    }
+
+    return await upsertGlobalStatus(ctx, nextRuleStatus)
   },
 })
 

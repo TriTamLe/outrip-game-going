@@ -1,73 +1,209 @@
-# React + TypeScript + Vite
+# Game Going
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Ứng dụng điều phối game nội bộ cho 4 team:
 
-Currently, two official plugins are available:
+- `Kindness`
+- `One-Team`
+- `Excellence`
+- `Sustainability`
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+App có 2 màn hình chính:
 
-## React Compiler
+- `/control`: màn hình điều khiển trên điện thoại hoặc laptop
+- `/present`: màn hình trình chiếu cho TV / máy chiếu
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+Dữ liệu được lưu trên Convex, UI dùng React + TanStack Router + Ant Design + Tailwind CSS v4.
 
-## Expanding the ESLint configuration
+## Tính năng chính
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### Scoreboard
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+- Hiển thị điểm của 4 team theo màu riêng
+- Cộng / trừ điểm nhanh ở `/control`
+- Có shortcut điểm `-20, -15, -10, -5, +5, +10, +15, +20`
+- Có reset điểm từng team với xác nhận
+- Hiển thị thứ hạng bằng icon trên cả `/control` và `/present`
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+### Game: Tâm Đầu Ý Hợp
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+- Dùng dữ liệu `postureWords`
+- `/control` có module chọn active word
+- `/present` hiển thị word ở dạng popup lớn giữa màn hình
+
+### Game: Tiếng Tây Tiếng Ta
+
+- Chơi theo từng team
+- Dùng dữ liệu `idioms`
+- Có các phase:
+  - `waiting`
+  - `playing`
+  - `ending`
+- Hỗ trợ:
+  - `Passed`
+  - `Guessed`
+  - `Pause / Resume`
+  - `End`
+- Có timer đồng bộ bằng Convex
+- Trạng thái idiom theo từng team gồm:
+  - `not-displayed`
+  - `passed`
+  - `guessed`
+  - `guessed-by-other`
+
+### Rule mode
+
+- Có route quản lý luật chơi riêng
+- `/control` có thể bật rule mode cho từng game
+- `/present` hiển thị markdown rule ở popup lớn giữa màn hình
+
+Các game hiện có trong phần rules:
+
+- `Tâm Đầu Ý Hợp`
+- `Tiếng Tây Tiếng Ta`
+- `Cuộc đấu Bất đồng bộ`
+- `Cuộc đi săn đầy yêu thương`
+
+### CRUD quản trị dữ liệu
+
+- `/idioms`: quản lý idioms và status reset
+- `/posture-words`: quản lý posture words song ngữ Anh / Việt
+- `/rules`: quản lý luật chơi theo markdown, có preview ngay trong form
+
+## Route
+
+| Route | Mục đích |
+| --- | --- |
+| `/` | Trang chủ, điều hướng nhanh |
+| `/control` | Màn hình điều khiển |
+| `/present` | Màn hình trình chiếu |
+| `/idioms` | Quản lý idioms |
+| `/posture-words` | Quản lý posture words |
+| `/rules` | Quản lý luật chơi |
+
+## Data model trên Convex
+
+Các table chính hiện tại:
+
+- `teams`: điểm số của 4 team
+- `idioms`: câu thành ngữ và status theo từng team
+- `postureWords`: từ cho game Tâm Đầu Ý Hợp
+- `rules`: luật chơi theo từng game
+- `globalStatus`: trạng thái toàn cục của app
+- `postureGame`: state riêng cho game Tâm Đầu Ý Hợp
+- `vienameseGame`: state riêng cho round Tiếng Tây Tiếng Ta
+- `vienameseSettings`: cấu hình thời lượng cho Tiếng Tây Tiếng Ta
+
+## Tech stack
+
+- React 19
+- TypeScript
+- Vite
+- TanStack Router
+- Convex
+- Ant Design
+- Tailwind CSS v4
+- React Icons
+- React Markdown
+
+## Chạy local
+
+### 1. Cài dependencies
+
+```bash
+yarn
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### 2. Kết nối Convex
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+Nếu đây là lần đầu chạy project:
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npx convex dev
 ```
+
+Lệnh này sẽ:
+
+- đăng nhập / chọn deployment Convex
+- tạo `.env.local`
+- sinh code trong `convex/_generated`
+
+Sau bước này app sẽ có `VITE_CONVEX_URL`.
+
+### 3. Chạy frontend
+
+```bash
+yarn dev
+```
+
+App chạy ở:
+
+```text
+http://localhost:3000
+```
+
+## Scripts
+
+```bash
+yarn dev
+yarn typecheck
+yarn lint
+yarn build
+yarn convex:dev
+yarn convex:deploy
+```
+
+## Workflow Convex
+
+Khi thay đổi schema hoặc functions trong thư mục `convex/`, chạy:
+
+```bash
+npx convex dev --once
+```
+
+hoặc:
+
+```bash
+yarn convex:dev
+```
+
+Để deploy backend Convex:
+
+```bash
+yarn convex:deploy
+```
+
+## Cấu trúc thư mục
+
+```text
+src/
+  features/
+    global-status/
+    idioms/
+    posture-game/
+    posture-words/
+    rules/
+    team-scoreboard/
+    vienamese-game/
+  pages/
+    control.tsx
+    idioms.tsx
+    index.tsx
+    posture-words.tsx
+    present.tsx
+    rules.tsx
+convex/
+  globalStatus.ts
+  idioms.ts
+  postureGame.ts
+  postureWords.ts
+  rules.ts
+  schema.ts
+  teams.ts
+  vienameseGame.ts
+```
+
+## Ghi chú
+
+- App yêu cầu `VITE_CONVEX_URL`; nếu thiếu, frontend sẽ báo lỗi và yêu cầu chạy `npx convex dev`
+- `/control` và `/present` được thiết kế cho hai thiết bị / hai màn hình chạy song song
+- `yarn typecheck` là cách kiểm tra chính trong quá trình phát triển
