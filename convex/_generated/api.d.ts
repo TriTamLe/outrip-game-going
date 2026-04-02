@@ -8,7 +8,11 @@
  * @module
  */
 
-import type * as health from "../health.js";
+import type * as globalStatus from "../globalStatus.js";
+import type * as idiomStatus from "../idiomStatus.js";
+import type * as idioms from "../idioms.js";
+import type * as team from "../team.js";
+import type * as teams from "../teams.js";
 
 import type {
   ApiFromModules,
@@ -17,7 +21,11 @@ import type {
 } from "convex/server";
 
 declare const fullApi: ApiFromModules<{
-  health: typeof health;
+  globalStatus: typeof globalStatus;
+  idiomStatus: typeof idiomStatus;
+  idioms: typeof idioms;
+  team: typeof team;
+  teams: typeof teams;
 }>;
 
 /**

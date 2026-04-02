@@ -1,0 +1,49 @@
+import { mutation, query } from './_generated/server'
+import { v } from 'convex/values'
+import { teamNames, teamOrder, teamValidator } from './team'
+
+export const list = query({
+  handler: async (ctx) => {
+    const existingTeams = await ctx.db.query('teams').collect()
+    const scoresByKey = new Map(
+      existingTeams.map((team) => [team.key, team.score] as const),
+    )
+
+    return teamOrder.map((key) => ({
+      key,
+      name: teamNames[key],
+      score: scoresByKey.get(key) ?? 0,
+    }))
+  },
+})
+
+export const adjustScore = mutation({
+  args: {
+    key: teamValidator,
+    delta: v.number(),
+  },
+  handler: async (ctx, { key, delta }) => {
+    const existingTeam = await ctx.db
+      .query('teams')
+      .withIndex('by_key', (q) => q.eq('key', key))
+      .unique()
+
+    if (existingTeam) {
+      const nextScore = existingTeam.score + delta
+
+      await ctx.db.patch(existingTeam._id, {
+        score: nextScore,
+      })
+
+      return nextScore
+    }
+
+    await ctx.db.insert('teams', {
+      key,
+      name: teamNames[key],
+      score: delta,
+    })
+
+    return delta
+  },
+})

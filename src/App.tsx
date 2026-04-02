@@ -5,22 +5,17 @@ import {
   createRoute,
   createRouter,
 } from '@tanstack/react-router'
-import { useQuery } from 'convex/react'
-import { api } from '../convex/_generated/api.js'
-import './App.css'
+import ControlPage from './pages/control.tsx'
+import IdiomsPage from './pages/idioms.tsx'
+import IndexPage from './pages/index.tsx'
+import PresentPage from './pages/present.tsx'
 
 function RootLayout() {
   return (
-    <main className="app-shell">
+    <main className="min-h-svh px-4 py-6 sm:px-6 lg:px-9 lg:py-8">
       <Outlet />
     </main>
   )
-}
-
-function IndexPage() {
-  const title = useQuery(api.health.getTitle)
-
-  return <h1>{title ?? 'Game Going'}</h1>
 }
 
 const rootRoute = createRootRoute({
@@ -33,7 +28,30 @@ const indexRoute = createRoute({
   component: IndexPage,
 })
 
-const routeTree = rootRoute.addChildren([indexRoute])
+const idiomsRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/idioms',
+  component: IdiomsPage,
+})
+
+const presentRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/present',
+  component: PresentPage,
+})
+
+const controlRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/control',
+  component: ControlPage,
+})
+
+const routeTree = rootRoute.addChildren([
+  indexRoute,
+  idiomsRoute,
+  presentRoute,
+  controlRoute,
+])
 
 const router = createRouter({
   routeTree,
