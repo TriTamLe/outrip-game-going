@@ -1,5 +1,5 @@
 import { Button, Card, Form, InputNumber, Statistic, Typography } from 'antd'
-import type { CSSProperties } from 'react'
+import type { CSSProperties, ReactNode } from 'react'
 import { FiMinus, FiPlus } from 'react-icons/fi'
 import type { TeamCard } from '../teamMeta.ts'
 
@@ -15,6 +15,8 @@ type TeamBoardProps = {
   comboScore?: number
   marker?: string | null
   showMembers?: boolean
+  hideControlButtons?: boolean
+  controlFooter?: ReactNode
   onAdjustScore?: (delta: number) => void | Promise<void>
 }
 
@@ -26,6 +28,8 @@ export function TeamBoard({
   comboScore = 0,
   marker = null,
   showMembers = true,
+  hideControlButtons = false,
+  controlFooter = null,
   onAdjustScore,
 }: TeamBoardProps) {
   const [form] = Form.useForm<ScoreFormValues>()
@@ -189,7 +193,7 @@ export function TeamBoard({
               />
             </div>
 
-            {isComboControl && comboScore !== 0 ? (
+            {isComboControl && !hideControlButtons && comboScore !== 0 ? (
               <Typography.Text
                 className={`pb-1 text-xs font-medium ${comboScoreClassName}`}
               >
@@ -201,24 +205,28 @@ export function TeamBoard({
 
         {isComboControl ? (
           <div className="grid gap-2.5">
-            <div className="grid grid-cols-2 gap-3">
-              <Button
-                aria-label="Decrease score"
-                className="!h-16 !w-full !select-none !rounded-[22px] !border-slate-200 !bg-white/86 !text-slate-900 !shadow-none hover:!border-slate-300 hover:!bg-white hover:!text-slate-950"
-                icon={<FiMinus className="text-[1.35rem]" />}
-                onClick={() => void onAdjustScore?.(-1)}
-                type="default"
-              />
+            {!hideControlButtons ? (
+              <div className="grid grid-cols-2 gap-3">
+                <Button
+                  aria-label="Decrease score"
+                  className="!h-16 !w-full !select-none !rounded-[22px] !border-slate-200 !bg-white/86 !text-slate-900 !shadow-none hover:!border-slate-300 hover:!bg-white hover:!text-slate-950"
+                  icon={<FiMinus className="text-[1.35rem]" />}
+                  onClick={() => void onAdjustScore?.(-1)}
+                  type="default"
+                />
 
-              <Button
-                aria-label="Increase score"
-                className="!h-16 !w-full !select-none !rounded-[22px] !border-0 !text-white !shadow-none"
-                icon={<FiPlus className="text-[1.35rem]" />}
-                onClick={() => void onAdjustScore?.(1)}
-                style={{ backgroundColor: team.buttonColor }}
-                type="primary"
-              />
-            </div>
+                <Button
+                  aria-label="Increase score"
+                  className="!h-16 !w-full !select-none !rounded-[22px] !border-0 !text-white !shadow-none"
+                  icon={<FiPlus className="text-[1.35rem]" />}
+                  onClick={() => void onAdjustScore?.(1)}
+                  style={{ backgroundColor: team.buttonColor }}
+                  type="primary"
+                />
+              </div>
+            ) : null}
+
+            {controlFooter}
           </div>
         ) : isControl ? (
           <Form

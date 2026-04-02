@@ -1,6 +1,35 @@
-import { mutation, query } from './_generated/server'
+import { mutation, query, type MutationCtx } from './_generated/server'
 import { v } from 'convex/values'
-import { teamNames, teamOrder, teamValidator } from './team'
+import { teamNames, teamOrder, teamValidator, type TeamKey } from './team'
+
+export async function adjustTeamScore(
+  ctx: MutationCtx,
+  key: TeamKey,
+  delta: number,
+) {
+  const existingTeam = await ctx.db
+    .query('teams')
+    .withIndex('by_key', (q) => q.eq('key', key))
+    .unique()
+
+  if (existingTeam) {
+    const nextScore = existingTeam.score + delta
+
+    await ctx.db.patch(existingTeam._id, {
+      score: nextScore,
+    })
+
+    return nextScore
+  }
+
+  await ctx.db.insert('teams', {
+    key,
+    name: teamNames[key],
+    score: delta,
+  })
+
+  return delta
+}
 
 export const list = query({
   handler: async (ctx) => {
@@ -23,27 +52,6 @@ export const adjustScore = mutation({
     delta: v.number(),
   },
   handler: async (ctx, { key, delta }) => {
-    const existingTeam = await ctx.db
-      .query('teams')
-      .withIndex('by_key', (q) => q.eq('key', key))
-      .unique()
-
-    if (existingTeam) {
-      const nextScore = existingTeam.score + delta
-
-      await ctx.db.patch(existingTeam._id, {
-        score: nextScore,
-      })
-
-      return nextScore
-    }
-
-    await ctx.db.insert('teams', {
-      key,
-      name: teamNames[key],
-      score: delta,
-    })
-
-    return delta
+    return await adjustTeamScore(ctx, key, delta)
   },
 })

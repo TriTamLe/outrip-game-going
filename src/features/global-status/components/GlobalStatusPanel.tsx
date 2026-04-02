@@ -12,12 +12,14 @@ const phaseLabels = {
   waiting: 'Waiting',
   playing: 'Playing',
   result: 'Result',
+  ending: 'Ending',
 } as const
 
 const phaseColors = {
   waiting: 'default',
   playing: 'processing',
   result: 'success',
+  ending: 'warning',
 } as const
 
 const teamNameByKey = Object.fromEntries(

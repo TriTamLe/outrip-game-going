@@ -1,4 +1,5 @@
 import { v } from 'convex/values'
+import type { TeamKey } from './team'
 
 export const idiomStatusValueValidator = v.union(
   v.literal('not-displayed'),
@@ -52,4 +53,22 @@ export function hasSameIdiomStatus(
     left.excellence === right.excellence &&
     left.sustainability === right.sustainability
   )
+}
+
+export function getIdiomStatusValueForTeam(
+  status: IdiomStatus,
+  team: TeamKey,
+): IdiomStatusValue {
+  return status[team]
+}
+
+export function setIdiomStatusValueForTeam(
+  status: IdiomStatus,
+  team: TeamKey,
+  value: IdiomStatusValue,
+): IdiomStatus {
+  return {
+    ...status,
+    [team]: value,
+  }
 }

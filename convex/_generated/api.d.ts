@@ -15,6 +15,7 @@ import type * as postureGame from "../postureGame.js";
 import type * as postureWords from "../postureWords.js";
 import type * as team from "../team.js";
 import type * as teams from "../teams.js";
+import type * as vienameseGame from "../vienameseGame.js";
 
 import type {
   ApiFromModules,
@@ -30,6 +31,7 @@ declare const fullApi: ApiFromModules<{
   postureWords: typeof postureWords;
   team: typeof team;
   teams: typeof teams;
+  vienameseGame: typeof vienameseGame;
 }>;
 
 /**

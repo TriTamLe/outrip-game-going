@@ -7,10 +7,16 @@ export const globalGameValidator = v.union(
   v.literal('in-game:vienamese'),
 )
 
-export const globalGamePhaseValidator = v.union(
+export const postureGamePhaseValidator = v.union(
   v.literal('waiting'),
   v.literal('playing'),
   v.literal('result'),
+)
+
+export const vienameseGamePhaseValidator = v.union(
+  v.literal('waiting'),
+  v.literal('playing'),
+  v.literal('ending'),
 )
 
 export const globalStatusValidator = v.union(
@@ -19,19 +25,20 @@ export const globalStatusValidator = v.union(
   }),
   v.object({
     value: v.literal('in-game:posture'),
-    phase: globalGamePhaseValidator,
+    phase: postureGamePhaseValidator,
   }),
   v.object({
     value: v.literal('in-game:vienamese'),
     team: teamValidator,
-    phase: globalGamePhaseValidator,
+    phase: vienameseGamePhaseValidator,
   }),
 )
 
 export const globalStatusKey = 'global'
 
 export type GlobalGame = 'in-game:posture' | 'in-game:vienamese'
-export type GlobalGamePhase = 'waiting' | 'playing' | 'result'
+export type PostureGamePhase = 'waiting' | 'playing' | 'result'
+export type VienameseGamePhase = 'waiting' | 'playing' | 'ending'
 
 export type GlobalStatus =
   | {
@@ -39,12 +46,12 @@ export type GlobalStatus =
     }
   | {
       value: 'in-game:posture'
-      phase: GlobalGamePhase
+      phase: PostureGamePhase
     }
   | {
       value: 'in-game:vienamese'
       team: TeamKey
-      phase: GlobalGamePhase
+      phase: VienameseGamePhase
     }
 
 export function createIdleGlobalStatus(): GlobalStatus {
@@ -95,12 +102,12 @@ export const setInGame = mutation({
     status: v.union(
       v.object({
         value: v.literal('in-game:posture'),
-        phase: globalGamePhaseValidator,
+        phase: postureGamePhaseValidator,
       }),
       v.object({
         value: v.literal('in-game:vienamese'),
         team: teamValidator,
-        phase: globalGamePhaseValidator,
+        phase: vienameseGamePhaseValidator,
       }),
     ),
   },

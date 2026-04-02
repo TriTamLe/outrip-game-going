@@ -75,6 +75,10 @@ export const toggleSession = mutation({
       (await getStoredGlobalStatus(ctx))?.current ?? createIdleGlobalStatus()
     const isPostureActive = currentStatus.value === 'in-game:posture'
 
+    if (!isPostureActive && currentStatus.value !== 'idle') {
+      throw new Error('Another game is already active.')
+    }
+
     if (isPostureActive) {
       await Promise.all([
         upsertGlobalStatus(ctx, createIdleGlobalStatus()),
