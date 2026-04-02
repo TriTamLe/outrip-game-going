@@ -179,3 +179,29 @@ export const backfillStatuses = mutation({
     }
   },
 })
+
+export const resetAllStatuses = mutation({
+  handler: async (ctx) => {
+    const idioms = await ctx.db.query('idioms').collect()
+    const defaultStatus = createDefaultIdiomStatus()
+    let updated = 0
+
+    for (const idiom of idioms) {
+      const normalizedStatus = normalizeIdiomStatus(idiom.status)
+
+      if (hasSameIdiomStatus(normalizedStatus, defaultStatus)) {
+        continue
+      }
+
+      await ctx.db.patch(idiom._id, {
+        status: defaultStatus,
+      })
+      updated += 1
+    }
+
+    return {
+      total: idioms.length,
+      updated,
+    }
+  },
+})

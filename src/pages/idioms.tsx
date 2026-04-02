@@ -1,4 +1,4 @@
-import { LeftOutlined, PlusOutlined } from '@ant-design/icons'
+import { LeftOutlined, PlusOutlined, ReloadOutlined } from '@ant-design/icons'
 import { useNavigate } from '@tanstack/react-router'
 import { Button, Card, InputNumber, Typography } from 'antd'
 import { useEffect, useState } from 'react'
@@ -16,11 +16,13 @@ function IdiomsPage() {
     editingIdiom,
     isModalOpen,
     isSaving,
+    isResettingStatuses,
     openCreateModal,
     openEditModal,
     closeModal,
     submitIdiom,
     deleteIdiom,
+    resetAllStatuses,
   } = useIdioms()
   const {
     durationMinutes,
@@ -35,8 +37,8 @@ function IdiomsPage() {
   }, [durationMinutes])
 
   return (
-    <section className="grid gap-6">
-      <header className="grid gap-6 rounded-[32px] border border-slate-900/8 bg-white/72 p-[clamp(24px,4vw,40px)] shadow-[0_24px_60px_rgba(148,163,184,0.16)] backdrop-blur-xl lg:grid-cols-[minmax(0,1.6fr)_auto] lg:items-end">
+    <section className="grid gap-4 sm:gap-6">
+      <header className="grid gap-5 rounded-[24px] border border-slate-900/8 bg-white/72 p-5 shadow-[0_20px_50px_rgba(148,163,184,0.16)] backdrop-blur-xl sm:rounded-[32px] sm:p-[clamp(24px,4vw,40px)] lg:grid-cols-[minmax(0,1.6fr)_auto] lg:items-end">
         <div>
           <Typography.Text className="mb-3.5 inline-block text-[0.8rem] font-bold uppercase tracking-[0.18em] text-slate-600">
             Idiom library
@@ -47,16 +49,17 @@ function IdiomsPage() {
           >
             Browse, edit, and grow the team idiom list.
           </Typography.Title>
-          <Typography.Paragraph className="!mt-4 !mb-0 max-w-[62ch] !text-base !leading-8 !text-slate-700">
+          <Typography.Paragraph className="!mt-4 !mb-0 max-w-[62ch] !text-[0.98rem] !leading-7 !text-slate-700 sm:!text-base sm:!leading-8">
             Every idiom keeps a status for Kindness, One-Team, Excellence, and
             Sustainability. You can add new idioms, refine existing ones, or
             remove entries that are no longer useful.
           </Typography.Paragraph>
         </div>
 
-        <div className="flex flex-wrap justify-end gap-3 max-lg:justify-start">
+        <div className="grid gap-3 sm:flex sm:flex-wrap sm:justify-start lg:justify-end">
           <Button
-            className="!h-12 !rounded-2xl !px-5 !font-semibold"
+            block
+            className="!h-12 !rounded-2xl !px-5 !font-semibold sm:!w-auto"
             icon={<LeftOutlined />}
             onClick={() => void navigate({ to: '/' })}
             size="large"
@@ -64,7 +67,18 @@ function IdiomsPage() {
             Back to scoreboard
           </Button>
           <Button
-            className="!h-12 !rounded-2xl !px-5 !font-semibold"
+            block
+            className="!h-12 !rounded-2xl !px-5 !font-semibold sm:!w-auto"
+            icon={<ReloadOutlined />}
+            loading={isResettingStatuses}
+            onClick={resetAllStatuses}
+            size="large"
+          >
+            Reset idiom statuses
+          </Button>
+          <Button
+            block
+            className="!h-12 !rounded-2xl !px-5 !font-semibold sm:!w-auto"
             icon={<PlusOutlined />}
             onClick={openCreateModal}
             size="large"
@@ -77,7 +91,7 @@ function IdiomsPage() {
 
       <Card
         bordered={false}
-        className="!rounded-[28px] !border border-slate-900/8 !bg-white/78 shadow-[0_24px_60px_rgba(148,163,184,0.16)]"
+        className="!rounded-[24px] !border border-slate-900/8 !bg-white/78 shadow-[0_20px_50px_rgba(148,163,184,0.16)] sm:!rounded-[28px] sm:shadow-[0_24px_60px_rgba(148,163,184,0.16)] [&_.ant-card-body]:!p-4 sm:[&_.ant-card-body]:!p-6"
       >
         <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end">
           <div className="grid gap-2">
@@ -113,7 +127,8 @@ function IdiomsPage() {
               value={durationInput}
             />
             <Button
-              className="!h-12 !rounded-2xl !px-5 !font-semibold"
+              block
+              className="!h-12 !rounded-2xl !px-5 !font-semibold sm:!w-auto"
               disabled={
                 isLoadingVienameseSettings || durationInput === durationMinutes
               }
@@ -129,7 +144,7 @@ function IdiomsPage() {
 
       <Card
         bordered={false}
-        className="!rounded-[28px] !border border-slate-900/8 !bg-white/78 shadow-[0_24px_60px_rgba(148,163,184,0.16)]"
+        className="!rounded-[24px] !border border-slate-900/8 !bg-white/78 shadow-[0_20px_50px_rgba(148,163,184,0.16)] sm:!rounded-[28px] sm:shadow-[0_24px_60px_rgba(148,163,184,0.16)] [&_.ant-card-body]:!p-3 sm:[&_.ant-card-body]:!p-6"
       >
         <IdiomsTable
           deletingId={deletingId}

@@ -5,6 +5,7 @@ export const idiomStatusValues = [
   'not-displayed',
   'passed',
   'guessed',
+  'guessed-by-other',
 ] as const
 
 export type IdiomStatusValue = (typeof idiomStatusValues)[number]
@@ -47,6 +48,11 @@ export const idiomStatusOptions = [
     value: 'guessed' as const,
     label: 'Guessed',
     color: '#16a34a',
+  },
+  {
+    value: 'guessed-by-other' as const,
+    label: 'Guessed by other',
+    color: '#7c3aed',
   },
 ]
 

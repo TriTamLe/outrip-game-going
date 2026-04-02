@@ -49,7 +49,8 @@ export function PostureWordModal({
 
   return (
     <Modal
-      className="[&_.ant-modal-content]:!rounded-[28px] [&_.ant-modal-content]:!p-6 [&_.ant-modal-header]:!mb-0 [&_.ant-modal-title]:!text-2xl [&_.ant-modal-title]:!font-semibold"
+      className="[&_.ant-modal-content]:!rounded-[24px] [&_.ant-modal-content]:!p-4 [&_.ant-modal-header]:!mb-0 [&_.ant-modal-title]:!text-xl [&_.ant-modal-title]:!font-semibold sm:[&_.ant-modal-content]:!rounded-[28px] sm:[&_.ant-modal-content]:!p-6 sm:[&_.ant-modal-title]:!text-2xl"
+      width={560}
       okText={postureWord ? 'Save changes' : 'Add posture word'}
       onCancel={onCancel}
       onOk={() => void form.submit()}
@@ -63,7 +64,7 @@ export function PostureWordModal({
       }}
     >
       <Form
-        className="mt-5"
+        className="mt-4 sm:mt-5"
         form={form}
         layout="vertical"
         onFinish={handleFinish}

@@ -10,6 +10,7 @@ import {
 import {
   getIdiomStatusValueForTeam,
   normalizeIdiomStatus,
+  setIdiomGuessedByTeam,
   setIdiomStatusValueForTeam,
 } from './idiomStatus'
 import { teamValidator, type TeamKey } from './team'
@@ -171,9 +172,13 @@ async function patchIdiomStatus(
   nextValue: 'passed' | 'guessed',
 ) {
   const normalizedStatus = normalizeIdiomStatus(idiom.status)
+  const nextStatus =
+    nextValue === 'guessed'
+      ? setIdiomGuessedByTeam(normalizedStatus, team)
+      : setIdiomStatusValueForTeam(normalizedStatus, team, nextValue)
 
   await ctx.db.patch(idiom._id, {
-    status: setIdiomStatusValueForTeam(normalizedStatus, team, nextValue),
+    status: nextStatus,
   })
 }
 

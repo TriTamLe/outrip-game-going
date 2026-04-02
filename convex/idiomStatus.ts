@@ -1,10 +1,11 @@
 import { v } from 'convex/values'
-import type { TeamKey } from './team'
+import { teamOrder, type TeamKey } from './team'
 
 export const idiomStatusValueValidator = v.union(
   v.literal('not-displayed'),
   v.literal('passed'),
   v.literal('guessed'),
+  v.literal('guessed-by-other'),
 )
 
 export const idiomStatusValidator = v.object({
@@ -14,7 +15,11 @@ export const idiomStatusValidator = v.object({
   sustainability: idiomStatusValueValidator,
 })
 
-export type IdiomStatusValue = 'not-displayed' | 'passed' | 'guessed'
+export type IdiomStatusValue =
+  | 'not-displayed'
+  | 'passed'
+  | 'guessed'
+  | 'guessed-by-other'
 
 export type IdiomStatus = {
   kindness: IdiomStatusValue
@@ -71,4 +76,18 @@ export function setIdiomStatusValueForTeam(
     ...status,
     [team]: value,
   }
+}
+
+export function setIdiomGuessedByTeam(
+  status: IdiomStatus,
+  team: TeamKey,
+): IdiomStatus {
+  const nextStatus = { ...status }
+
+  for (const currentTeam of teamOrder) {
+    nextStatus[currentTeam] =
+      currentTeam === team ? 'guessed' : 'guessed-by-other'
+  }
+
+  return nextStatus
 }
