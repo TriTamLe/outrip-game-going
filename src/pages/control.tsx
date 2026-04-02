@@ -1,18 +1,28 @@
 import {
+  HomeOutlined,
   EyeInvisibleOutlined,
   EyeOutlined,
 } from '@ant-design/icons'
+import { useNavigate } from '@tanstack/react-router'
 import { Affix, Button } from 'antd'
 import { useState } from 'react'
 import { InGamePostureModule } from '../features/posture-game/components/InGamePostureModule.tsx'
 import { usePostureGame } from '../features/posture-game/hooks/usePostureGame.ts'
 import { TeamBoard } from '../features/team-scoreboard/components/TeamBoard.tsx'
+import { getTeamMarkers } from '../features/team-scoreboard/getTeamMarkers.ts'
 import { useComboTeamScores } from '../features/team-scoreboard/hooks/useComboTeamScores.ts'
 import { VienameseControlFooter } from '../features/vienamese-game/components/VienameseControlFooter.tsx'
 import { useVienameseGame } from '../features/vienamese-game/hooks/useVienameseGame.ts'
 
 function ControlPage() {
-  const { teams, comboScores, queueScoreChange } = useComboTeamScores()
+  const navigate = useNavigate()
+  const {
+    teams,
+    comboScores,
+    queueScoreChange,
+    resettingKey,
+    resetScore,
+  } = useComboTeamScores()
   const {
     activeWord,
     words,
@@ -74,6 +84,7 @@ function ControlPage() {
         : status.value === 'in-game:posture'
           ? 'In-game · Tâm Đầu Ý Hợp'
           : 'In-game · Tiếng Tây Tiếng Ta'
+  const markers = getTeamMarkers(teams)
 
   return (
     <section className="mx-auto grid max-w-[520px] gap-4">
@@ -85,23 +96,31 @@ function ControlPage() {
                 {statusPillText}
               </div>
 
-              <Button
-                aria-label={
-                  showMembersOnPresent
-                    ? 'Hide member list on present'
-                    : 'Show member list on present'
-                }
-                className="!h-10 !w-10 !rounded-full !border-0 !bg-white/78 !text-slate-700 shadow-[0_10px_24px_rgba(148,163,184,0.12)]"
-                icon={
-                  showMembersOnPresent ? (
-                    <EyeInvisibleOutlined />
-                  ) : (
-                    <EyeOutlined />
-                  )
-                }
-                loading={isTogglingMembers}
-                onClick={() => void toggleMembersOnPresent()}
-              />
+              <div className="flex items-center gap-2">
+                <Button
+                  aria-label="Back to home"
+                  className="!h-10 !w-10 !rounded-full !border-0 !bg-white/78 !text-slate-700 shadow-[0_10px_24px_rgba(148,163,184,0.12)]"
+                  icon={<HomeOutlined />}
+                  onClick={() => void navigate({ to: '/' })}
+                />
+                <Button
+                  aria-label={
+                    showMembersOnPresent
+                      ? 'Hide member list on present'
+                      : 'Show member list on present'
+                  }
+                  className="!h-10 !w-10 !rounded-full !border-0 !bg-white/78 !text-slate-700 shadow-[0_10px_24px_rgba(148,163,184,0.12)]"
+                  icon={
+                    showMembersOnPresent ? (
+                      <EyeInvisibleOutlined />
+                    ) : (
+                      <EyeOutlined />
+                    )
+                  }
+                  loading={isTogglingMembers}
+                  onClick={() => void toggleMembersOnPresent()}
+                />
+              </div>
             </div>
 
             {!isAffixed ? (
@@ -179,8 +198,11 @@ function ControlPage() {
               controlFooter={footer}
               hideControlButtons={isActiveVienameseBoard}
               key={team.key}
+              marker={markers[team.key] ?? null}
               mode="control"
               onAdjustScore={(delta) => queueScoreChange(team.key, delta)}
+              onResetScore={() => resetScore(team.key)}
+              resetting={resettingKey === team.key}
               team={team}
             />
           )

@@ -31,6 +31,32 @@ export async function adjustTeamScore(
   return delta
 }
 
+export async function resetTeamScore(
+  ctx: MutationCtx,
+  key: TeamKey,
+) {
+  const existingTeam = await ctx.db
+    .query('teams')
+    .withIndex('by_key', (q) => q.eq('key', key))
+    .unique()
+
+  if (existingTeam) {
+    await ctx.db.patch(existingTeam._id, {
+      score: 0,
+    })
+
+    return 0
+  }
+
+  await ctx.db.insert('teams', {
+    key,
+    name: teamNames[key],
+    score: 0,
+  })
+
+  return 0
+}
+
 export const list = query({
   handler: async (ctx) => {
     const existingTeams = await ctx.db.query('teams').collect()
@@ -53,5 +79,14 @@ export const adjustScore = mutation({
   },
   handler: async (ctx, { key, delta }) => {
     return await adjustTeamScore(ctx, key, delta)
+  },
+})
+
+export const resetScore = mutation({
+  args: {
+    key: teamValidator,
+  },
+  handler: async (ctx, { key }) => {
+    return await resetTeamScore(ctx, key)
   },
 })

@@ -12,10 +12,12 @@ type SyncingMap = Partial<Record<TeamKey, boolean>>
 type FlushTimer = ReturnType<typeof setTimeout>
 
 export function useComboTeamScores() {
-  const { message } = AntdApp.useApp()
+  const { message, modal } = AntdApp.useApp()
   const { teams } = useTeamCards()
   const adjustScoreMutation = useMutation(api.teams.adjustScore)
+  const resetScoreMutation = useMutation(api.teams.resetScore)
   const [comboScores, setComboScores] = useState<ComboScoresMap>({})
+  const [resettingKey, setResettingKey] = useState<TeamKey | null>(null)
   const comboScoresRef = useRef<ComboScoresMap>({})
   const syncingRef = useRef<SyncingMap>({})
   const flushTimersRef = useRef<Partial<Record<TeamKey, FlushTimer>>>({})
@@ -111,9 +113,46 @@ export function useComboTeamScores() {
     updateComboScores(nextComboScores)
   }
 
+  function clearComboScore(key: TeamKey) {
+    cancelFlush(key)
+
+    const nextComboScores = { ...comboScoresRef.current }
+    delete nextComboScores[key]
+    updateComboScores(nextComboScores)
+  }
+
+  async function resetScore(key: TeamKey) {
+    const teamName = teams.find((team) => team.key === key)?.name ?? key
+
+    void modal.confirm({
+      centered: true,
+      okButtonProps: { danger: true },
+      okText: 'Reset score',
+      title: `Reset ${teamName}?`,
+      content: 'This will set the team score back to 0.',
+      onOk: async () => {
+        setResettingKey(key)
+        clearComboScore(key)
+
+        try {
+          await resetScoreMutation({ key })
+        } catch (error) {
+          console.error(error)
+          void message.error('Unable to reset the score right now.')
+        } finally {
+          setResettingKey((currentKey) =>
+            currentKey === key ? null : currentKey,
+          )
+        }
+      },
+    })
+  }
+
   return {
     teams,
     comboScores,
     queueScoreChange,
+    resettingKey,
+    resetScore,
   }
 }

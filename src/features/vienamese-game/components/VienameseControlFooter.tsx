@@ -150,7 +150,7 @@ export function VienameseControlFooter({
           Round score: {roundScore}
         </Typography.Title>
         <Typography.Text className="text-sm font-medium text-slate-600">
-          Total team score: {totalScore}
+          Total team score: {totalScore} 🌸
         </Typography.Text>
       </div>
       <Button

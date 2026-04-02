@@ -28,7 +28,7 @@ export function VienamesePresentBoard({
         Score
       </div>
       <div className="pt-2 text-[clamp(2.8rem,5vw,4.4rem)] font-bold leading-none tracking-[-0.05em] text-slate-950">
-        {totalScore}
+        {totalScore} <span className="text-[0.42em] align-[0.18em]">🌸</span>
       </div>
     </div>
   )

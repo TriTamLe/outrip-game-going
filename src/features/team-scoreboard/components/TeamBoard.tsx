@@ -1,3 +1,4 @@
+import { ReloadOutlined } from '@ant-design/icons'
 import { Button, Card, Form, InputNumber, Statistic, Typography } from 'antd'
 import type { CSSProperties, ReactNode } from 'react'
 import { FiMinus, FiPlus } from 'react-icons/fi'
@@ -17,8 +18,12 @@ type TeamBoardProps = {
   showMembers?: boolean
   hideControlButtons?: boolean
   controlFooter?: ReactNode
+  resetting?: boolean
+  onResetScore?: () => void | Promise<void>
   onAdjustScore?: (delta: number) => void | Promise<void>
 }
+
+const quickAdjustments = [-20, -15, -10, -5, 5, 10, 15, 20] as const
 
 export function TeamBoard({
   team,
@@ -30,6 +35,8 @@ export function TeamBoard({
   showMembers = true,
   hideControlButtons = false,
   controlFooter = null,
+  resetting = false,
+  onResetScore,
   onAdjustScore,
 }: TeamBoardProps) {
   const [form] = Form.useForm<ScoreFormValues>()
@@ -110,22 +117,34 @@ export function TeamBoard({
       />
       <div className={variantClasses.content}>
         <div className="grid gap-1.5">
-          <div className="flex items-center gap-3">
-            {marker ? (
-              <div
-                className={`shrink-0 leading-none ${
-                  boardVariant === 'present'
-                    ? 'text-[clamp(2.8rem,5.4vw,4.1rem)]'
-                    : 'text-[2rem]'
-                }`}
-              >
-                {marker}
-              </div>
-            ) : null}
+          <div className="flex items-start justify-between gap-3">
+            <div className="flex items-center gap-3">
+              {marker ? (
+                <div
+                  className={`shrink-0 leading-none ${
+                    boardVariant === 'present'
+                      ? 'text-[clamp(2.8rem,5.4vw,4.1rem)]'
+                      : 'text-[2rem]'
+                  }`}
+                >
+                  {marker}
+                </div>
+              ) : null}
 
-            <Typography.Title className={variantClasses.title} level={3}>
-              {team.name}
-            </Typography.Title>
+              <Typography.Title className={variantClasses.title} level={3}>
+                {team.name}
+              </Typography.Title>
+            </div>
+
+            {isComboControl && onResetScore ? (
+              <Button
+                aria-label={`Reset ${team.name} score`}
+                className="!h-9 !w-9 !rounded-full !border-white/70 !bg-white/76 !text-slate-700 !shadow-none"
+                icon={<ReloadOutlined />}
+                loading={resetting}
+                onClick={() => void onResetScore()}
+              />
+            ) : null}
           </div>
 
           <Typography.Text className={variantClasses.label}>
@@ -139,10 +158,9 @@ export function TeamBoard({
               <Statistic
                 className="!text-slate-900"
                 formatter={() => (
-                  <span
-                    className={`font-medium leading-none text-slate-900 ${variantClasses.score}`}
-                  >
-                    {team.score ?? 0}
+                  <span className={`inline-flex items-end gap-2 font-medium leading-none text-slate-900 ${variantClasses.score}`}>
+                    <span>{team.score ?? 0}</span>
+                    <span className="text-[0.36em] leading-none">🌸</span>
                   </span>
                 )}
                 loading={team.score === null}
@@ -182,10 +200,9 @@ export function TeamBoard({
               <Statistic
                 className="!text-slate-900"
                 formatter={() => (
-                  <span
-                    className={`font-medium leading-none text-slate-900 ${variantClasses.score}`}
-                  >
-                    {team.score ?? 0}
+                  <span className={`inline-flex items-end gap-2 font-medium leading-none text-slate-900 ${variantClasses.score}`}>
+                    <span>{team.score ?? 0}</span>
+                    <span className="text-[0.36em] leading-none">🌸</span>
                   </span>
                 )}
                 loading={team.score === null}
@@ -206,23 +223,51 @@ export function TeamBoard({
         {isComboControl ? (
           <div className="grid gap-2.5">
             {!hideControlButtons ? (
-              <div className="grid grid-cols-2 gap-3">
-                <Button
-                  aria-label="Decrease score"
-                  className="!h-16 !w-full !select-none !rounded-[22px] !border-slate-200 !bg-white/86 !text-slate-900 !shadow-none hover:!border-slate-300 hover:!bg-white hover:!text-slate-950"
-                  icon={<FiMinus className="text-[1.35rem]" />}
-                  onClick={() => void onAdjustScore?.(-1)}
-                  type="default"
-                />
+              <div className="grid gap-3">
+                <div className="-mx-1 flex gap-2 overflow-x-auto px-1 pb-1">
+                  {quickAdjustments.map((delta) => {
+                    const isPositive = delta > 0
+                    const label = isPositive ? `+${delta}` : `${delta}`
 
-                <Button
-                  aria-label="Increase score"
-                  className="!h-16 !w-full !select-none !rounded-[22px] !border-0 !text-white !shadow-none"
-                  icon={<FiPlus className="text-[1.35rem]" />}
-                  onClick={() => void onAdjustScore?.(1)}
-                  style={{ backgroundColor: team.buttonColor }}
-                  type="primary"
-                />
+                    return (
+                      <Button
+                        className={`!h-9 !shrink-0 !select-none !rounded-full !px-3 !text-sm !font-semibold !shadow-none ${
+                          isPositive
+                            ? '!border-0 !text-white'
+                            : '!border-slate-200 !bg-white/86 !text-slate-900'
+                        }`}
+                        key={delta}
+                        onClick={() => void onAdjustScore?.(delta)}
+                        style={
+                          isPositive
+                            ? { backgroundColor: team.buttonColor }
+                            : undefined
+                        }
+                      >
+                        {label}
+                      </Button>
+                    )
+                  })}
+                </div>
+
+                <div className="grid grid-cols-2 gap-3">
+                  <Button
+                    aria-label="Decrease score"
+                    className="!h-16 !w-full !select-none !rounded-[22px] !border-slate-200 !bg-white/86 !text-slate-900 !shadow-none hover:!border-slate-300 hover:!bg-white hover:!text-slate-950"
+                    icon={<FiMinus className="text-[1.35rem]" />}
+                    onClick={() => void onAdjustScore?.(-1)}
+                    type="default"
+                  />
+
+                  <Button
+                    aria-label="Increase score"
+                    className="!h-16 !w-full !select-none !rounded-[22px] !border-0 !text-white !shadow-none"
+                    icon={<FiPlus className="text-[1.35rem]" />}
+                    onClick={() => void onAdjustScore?.(1)}
+                    style={{ backgroundColor: team.buttonColor }}
+                    type="primary"
+                  />
+                </div>
               </div>
             ) : null}
 
