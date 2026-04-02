@@ -15,6 +15,18 @@ export default defineSchema({
   })
     .index('by_text', ['text'])
     .index('by_order', ['order']),
+  postureWords: defineTable({
+    english: v.string(),
+    vietnamese: v.string(),
+    order: v.number(),
+  })
+    .index('by_english', ['english'])
+    .index('by_order', ['order']),
+  postureGame: defineTable({
+    key: v.string(),
+    activeWordId: v.optional(v.id('postureWords')),
+    showMembersOnPresent: v.optional(v.boolean()),
+  }).index('by_key', ['key']),
   teams: defineTable({
     key: v.string(),
     name: v.string(),

@@ -7,7 +7,10 @@ type TeamBoardsGridProps = {
   boardVariant?: 'default' | 'present' | 'control'
   className?: string
   submittingKey?: TeamKey | null
-  onAdjustScore?: (key: TeamKey, delta: number) => Promise<void>
+  comboScores?: Partial<Record<TeamKey, number>>
+  markers?: Partial<Record<TeamKey, string>>
+  showMembers?: boolean
+  onAdjustScore?: (key: TeamKey, delta: number) => void | Promise<void>
 }
 
 export function TeamBoardsGrid({
@@ -16,6 +19,9 @@ export function TeamBoardsGrid({
   boardVariant = 'default',
   className = 'grid gap-5 lg:grid-cols-2',
   submittingKey = null,
+  comboScores = {},
+  markers = {},
+  showMembers = true,
   onAdjustScore,
 }: TeamBoardsGridProps) {
   return (
@@ -23,11 +29,14 @@ export function TeamBoardsGrid({
       {teams.map((team) => (
         <TeamBoard
           boardVariant={boardVariant}
+          comboScore={comboScores[team.key] ?? 0}
           key={team.key}
+          marker={markers[team.key] ?? null}
           mode={mode}
           onAdjustScore={
             onAdjustScore ? (delta) => onAdjustScore(team.key, delta) : undefined
           }
+          showMembers={showMembers}
           submitting={submittingKey === team.key}
           team={team}
         />

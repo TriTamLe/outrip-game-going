@@ -18,7 +18,11 @@ export const globalStatusValidator = v.union(
     value: v.literal('idle'),
   }),
   v.object({
-    value: globalGameValidator,
+    value: v.literal('in-game:posture'),
+    phase: globalGamePhaseValidator,
+  }),
+  v.object({
+    value: v.literal('in-game:vienamese'),
     team: teamValidator,
     phase: globalGamePhaseValidator,
   }),
@@ -34,7 +38,11 @@ export type GlobalStatus =
       value: 'idle'
     }
   | {
-      value: GlobalGame
+      value: 'in-game:posture'
+      phase: GlobalGamePhase
+    }
+  | {
+      value: 'in-game:vienamese'
       team: TeamKey
       phase: GlobalGamePhase
     }
@@ -84,15 +92,24 @@ export const setIdle = mutation({
 
 export const setInGame = mutation({
   args: {
-    value: globalGameValidator,
-    team: teamValidator,
-    phase: globalGamePhaseValidator,
+    status: v.union(
+      v.object({
+        value: v.literal('in-game:posture'),
+        phase: globalGamePhaseValidator,
+      }),
+      v.object({
+        value: v.literal('in-game:vienamese'),
+        team: teamValidator,
+        phase: globalGamePhaseValidator,
+      }),
+    ),
   },
-  handler: async (ctx, { value, team, phase }) => {
-    return await upsertGlobalStatus(ctx, {
-      value,
-      team,
-      phase,
-    })
+  handler: async (ctx, { status }) => {
+    return await upsertGlobalStatus(ctx, status)
   },
 })
+
+export {
+  getStoredGlobalStatus,
+  upsertGlobalStatus,
+}

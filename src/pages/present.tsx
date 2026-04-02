@@ -1,36 +1,81 @@
-import { Typography } from 'antd'
+import { GlobalStatusPanel } from '../features/global-status/components/GlobalStatusPanel.tsx'
+import { PosturePresentOverlay } from '../features/posture-game/components/PosturePresentOverlay.tsx'
+import { usePostureGame } from '../features/posture-game/hooks/usePostureGame.ts'
 import { TeamBoardsGrid } from '../features/team-scoreboard/components/TeamBoardsGrid.tsx'
 import { useTeamScores } from '../features/team-scoreboard/hooks/useTeamScores.ts'
+import type { TeamCard, TeamKey } from '../features/team-scoreboard/teamMeta.ts'
+
+function getPresentMarkers(teams: TeamCard[]) {
+  if (teams.some((team) => team.score === null)) {
+    return {} as Partial<Record<TeamKey, string>>
+  }
+
+  const sortedTeams = [...teams].sort(
+    (leftTeam, rightTeam) => (rightTeam.score ?? 0) - (leftTeam.score ?? 0),
+  )
+  const markers: Partial<Record<TeamKey, string>> = {}
+  let currentRank = 1
+
+  for (let index = 0; index < sortedTeams.length; ) {
+    const score = sortedTeams[index].score ?? 0
+    let endIndex = index + 1
+
+    while ((sortedTeams[endIndex]?.score ?? null) === score) {
+      endIndex += 1
+    }
+
+    const marker =
+      score === 0
+        ? '🗿'
+        : currentRank === 1
+          ? '🥇'
+          : currentRank === 2
+            ? '🥈'
+            : currentRank === 3
+              ? '🥉'
+              : '🗿'
+
+    for (const team of sortedTeams.slice(index, endIndex)) {
+      markers[team.key] = marker
+    }
+
+    currentRank += endIndex - index
+    index = endIndex
+  }
+
+  return markers
+}
 
 function PresentPage() {
   const { teams } = useTeamScores()
+  const { activeWord, isPostureActive, showMembersOnPresent, status } =
+    usePostureGame()
+  const markers = getPresentMarkers(teams)
+  const shouldShowStatusPanel =
+    status !== undefined && status.value !== 'idle'
 
   return (
-    <section className="grid min-h-[calc(100svh-72px)] grid-rows-[auto_1fr] gap-6 max-[720px]:min-h-0">
-      <header className="grid gap-6 rounded-[32px] border border-slate-900/8 bg-white/72 p-[clamp(28px,4vw,42px)] shadow-[0_24px_60px_rgba(148,163,184,0.16)] backdrop-blur-xl lg:grid-cols-[minmax(0,1.5fr)_minmax(280px,1fr)] lg:items-end">
-        <div>
-          <Typography.Text className="mb-3.5 inline-block text-[0.95rem] font-bold uppercase tracking-[0.18em] text-slate-600">
-            Presentation mode
-          </Typography.Text>
-          <Typography.Title
-            className="!mb-0 !max-w-none !text-[clamp(3.2rem,7vw,6rem)] !leading-[0.92] !tracking-[-0.06em] !text-slate-900"
-            level={1}
-          >
-            Live team scores
-          </Typography.Title>
+    <section className="grid min-h-[calc(100svh-72px)] max-[720px]:min-h-0">
+      {shouldShowStatusPanel ? (
+        <div className="pointer-events-none fixed right-6 top-6 z-20 w-[300px]">
+          <div className="rounded-[24px] border border-slate-900/10 bg-slate-100/90 p-3 shadow-[0_20px_40px_rgba(148,163,184,0.2)] backdrop-blur-xl">
+            <GlobalStatusPanel embedded />
+          </div>
         </div>
-
-        <Typography.Paragraph className="!m-0 self-end !text-[clamp(1.05rem,1.8vw,1.35rem)] !leading-[1.6] !text-slate-700">
-          Built to sit on a big screen and stay readable from across the room.
-        </Typography.Paragraph>
-      </header>
+      ) : null}
 
       <TeamBoardsGrid
         boardVariant="present"
-        className="grid content-stretch gap-6 lg:grid-cols-2 max-[720px]:grid-cols-1"
+        className="grid h-full content-stretch gap-6 lg:grid-cols-2 max-[720px]:grid-cols-1"
+        markers={markers}
         mode="display"
+        showMembers={showMembersOnPresent}
         teams={teams}
       />
+
+      {isPostureActive && activeWord ? (
+        <PosturePresentOverlay word={activeWord} />
+      ) : null}
     </section>
   )
 }

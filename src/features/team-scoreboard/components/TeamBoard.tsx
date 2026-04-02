@@ -1,5 +1,6 @@
 import { Button, Card, Form, InputNumber, Statistic, Typography } from 'antd'
 import type { CSSProperties } from 'react'
+import { FiMinus, FiPlus } from 'react-icons/fi'
 import type { TeamCard } from '../teamMeta.ts'
 
 type ScoreFormValues = {
@@ -11,7 +12,10 @@ type TeamBoardProps = {
   boardVariant?: 'default' | 'present' | 'control'
   mode?: 'display' | 'control'
   submitting?: boolean
-  onAdjustScore?: (delta: number) => Promise<void>
+  comboScore?: number
+  marker?: string | null
+  showMembers?: boolean
+  onAdjustScore?: (delta: number) => void | Promise<void>
 }
 
 export function TeamBoard({
@@ -19,10 +23,14 @@ export function TeamBoard({
   boardVariant = 'default',
   mode = 'display',
   submitting = false,
+  comboScore = 0,
+  marker = null,
+  showMembers = true,
   onAdjustScore,
 }: TeamBoardProps) {
   const [form] = Form.useForm<ScoreFormValues>()
   const isControl = mode === 'control'
+  const isComboControl = isControl && boardVariant === 'control'
   const variantClasses = {
     default: {
       card:
@@ -40,7 +48,7 @@ export function TeamBoard({
       card:
         '!rounded-[32px] shadow-[0_28px_70px_rgba(15,23,42,0.14)]',
       content:
-        'grid min-h-[min(33vh,360px)] content-between gap-7 max-[720px]:min-h-0',
+        'grid min-h-[min(38vh,430px)] gap-5 max-[720px]:min-h-0',
       title: '!mb-0 !text-[clamp(2rem,3vw,2.8rem)] !font-bold !text-slate-900',
       label: 'text-base text-slate-600',
       score:
@@ -63,6 +71,14 @@ export function TeamBoard({
       button: '!h-14 !rounded-2xl !text-base !font-bold',
     },
   }[boardVariant]
+  const comboScoreText =
+    comboScore > 0 ? `+${comboScore}` : comboScore < 0 ? `${comboScore}` : '0'
+  const comboScoreClassName =
+    comboScore > 0
+      ? 'text-emerald-700'
+      : comboScore < 0
+        ? 'text-rose-700'
+        : 'text-slate-500'
 
   async function handleFinish(values: ScoreFormValues) {
     if (typeof values.delta !== 'number' || !onAdjustScore) {
@@ -90,28 +106,121 @@ export function TeamBoard({
       />
       <div className={variantClasses.content}>
         <div className="grid gap-1.5">
-          <Typography.Title className={variantClasses.title} level={3}>
-            {team.name}
-          </Typography.Title>
+          <div className="flex items-center gap-3">
+            {marker ? (
+              <div
+                className={`shrink-0 leading-none ${
+                  boardVariant === 'present'
+                    ? 'text-[clamp(2.8rem,5.4vw,4.1rem)]'
+                    : 'text-[2rem]'
+                }`}
+              >
+                {marker}
+              </div>
+            ) : null}
+
+            <Typography.Title className={variantClasses.title} level={3}>
+              {team.name}
+            </Typography.Title>
+          </div>
+
           <Typography.Text className={variantClasses.label}>
             Current score
           </Typography.Text>
         </div>
 
-        <Statistic
-          className="!text-slate-900"
-          formatter={() => (
-            <span
-              className={`font-extrabold leading-none text-slate-900 ${variantClasses.score}`}
-            >
-              {team.score ?? 0}
-            </span>
-          )}
-          loading={team.score === null}
-          value={team.score ?? 0}
-        />
+        {boardVariant === 'present' ? (
+          <div className="flex flex-1 gap-5 max-[720px]:flex-col">
+            <div className="flex min-w-[180px] flex-[0.95] items-center">
+              <Statistic
+                className="!text-slate-900"
+                formatter={() => (
+                  <span
+                    className={`font-medium leading-none text-slate-900 ${variantClasses.score}`}
+                  >
+                    {team.score ?? 0}
+                  </span>
+                )}
+                loading={team.score === null}
+                value={team.score ?? 0}
+              />
+            </div>
 
-        {isControl ? (
+            {showMembers ? (
+              <div className="flex min-h-0 flex-[1.32] items-center">
+                <div className="grid max-h-[248px] w-full grid-cols-2 gap-3 overflow-hidden max-[720px]:max-h-none">
+                  {team.members.map((member) => (
+                    <div
+                      className={`rounded-[18px] px-3.5 py-2.5 ${
+                        member.role
+                          ? 'border border-white/80 bg-white/72'
+                          : 'bg-white/48'
+                      }`}
+                      key={`${team.key}-${member.name}`}
+                    >
+                      <div className="text-[0.96rem] font-semibold leading-tight text-slate-900">
+                        {member.name}
+                      </div>
+                      {member.role ? (
+                        <div className="pt-0.5 text-[0.68rem] font-semibold uppercase tracking-[0.14em] text-slate-500">
+                          {member.role}
+                        </div>
+                      ) : null}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ) : null}
+          </div>
+        ) : (
+          <div className="flex items-end justify-between gap-3">
+            <div className="min-w-0 flex-1">
+              <Statistic
+                className="!text-slate-900"
+                formatter={() => (
+                  <span
+                    className={`font-medium leading-none text-slate-900 ${variantClasses.score}`}
+                  >
+                    {team.score ?? 0}
+                  </span>
+                )}
+                loading={team.score === null}
+                value={team.score ?? 0}
+              />
+            </div>
+
+            {isComboControl && comboScore !== 0 ? (
+              <Typography.Text
+                className={`pb-1 text-xs font-medium ${comboScoreClassName}`}
+              >
+                Combo {comboScoreText}
+              </Typography.Text>
+            ) : null}
+          </div>
+        )}
+
+        {isComboControl ? (
+          <div className="grid gap-2.5">
+            <div className="grid grid-cols-2 gap-3">
+              <Button
+                aria-label="Decrease score"
+                className="!h-16 !w-full !select-none !rounded-[22px] !border-slate-200 !bg-white/86 !text-slate-900 !shadow-none hover:!border-slate-300 hover:!bg-white hover:!text-slate-950"
+                icon={<FiMinus className="text-[1.35rem]" />}
+                onClick={() => void onAdjustScore?.(-1)}
+                type="default"
+              />
+
+              <Button
+                aria-label="Increase score"
+                className="!h-16 !w-full !select-none !rounded-[22px] !border-0 !text-white !shadow-none"
+                icon={<FiPlus className="text-[1.35rem]" />}
+                onClick={() => void onAdjustScore?.(1)}
+                style={{ backgroundColor: team.buttonColor }}
+                type="primary"
+              />
+            </div>
+          </div>
+        ) : isControl ? (
           <Form
             className={`grid ${boardVariant === 'control' ? 'gap-3' : 'gap-2.5'}`}
             form={form}

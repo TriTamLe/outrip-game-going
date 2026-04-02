@@ -11,6 +11,8 @@
 import type * as globalStatus from "../globalStatus.js";
 import type * as idiomStatus from "../idiomStatus.js";
 import type * as idioms from "../idioms.js";
+import type * as postureGame from "../postureGame.js";
+import type * as postureWords from "../postureWords.js";
 import type * as team from "../team.js";
 import type * as teams from "../teams.js";
 
@@ -24,6 +26,8 @@ declare const fullApi: ApiFromModules<{
   globalStatus: typeof globalStatus;
   idiomStatus: typeof idiomStatus;
   idioms: typeof idioms;
+  postureGame: typeof postureGame;
+  postureWords: typeof postureWords;
   team: typeof team;
   teams: typeof teams;
 }>;
