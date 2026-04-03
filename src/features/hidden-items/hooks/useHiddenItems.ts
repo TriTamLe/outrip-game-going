@@ -50,6 +50,7 @@ export function useHiddenItems() {
           name: values.name,
           description: values.description,
           score: values.score,
+          isFound: values.isFound,
         })
         void message.success('Hidden item updated.')
       } else {

@@ -1,4 +1,4 @@
-import { Form, Input, InputNumber, Modal } from 'antd'
+import { Checkbox, Form, Input, InputNumber, Modal } from 'antd'
 import { useEffect } from 'react'
 import type {
   HiddenItemFormValues,
@@ -33,11 +33,13 @@ export function HiddenItemModal({
             name: hiddenItem.name,
             description: hiddenItem.description,
             score: hiddenItem.score,
+            isFound: hiddenItem.isFound,
           }
         : {
             name: '',
             description: '',
             score: 0,
+            isFound: false,
           },
     )
   }, [form, hiddenItem, open])
@@ -47,6 +49,7 @@ export function HiddenItemModal({
       name: values.name.trim(),
       description: values.description?.trim() || undefined,
       score: values.score,
+      isFound: values.isFound,
     })
   }
 
@@ -69,6 +72,7 @@ export function HiddenItemModal({
       <Form
         className="mt-4 sm:mt-5"
         form={form}
+        initialValues={{ isFound: false }}
         layout="vertical"
         onFinish={handleFinish}
       >
@@ -106,7 +110,7 @@ export function HiddenItemModal({
         </Form.Item>
 
         <Form.Item<HiddenItemFormValues>
-          className="!mb-0"
+          className="!mb-4"
           label="Score"
           name="score"
           rules={[{ required: true, message: 'Enter the score.' }]}
@@ -115,6 +119,16 @@ export function HiddenItemModal({
             className="!h-12 !w-full !rounded-2xl !bg-white/90 [&_.ant-input-number-input]:!h-[46px] [&_.ant-input-number-input]:!text-base"
             placeholder="Can be negative"
           />
+        </Form.Item>
+
+        <Form.Item<HiddenItemFormValues>
+          className="!mb-0"
+          name="isFound"
+          valuePropName="checked"
+        >
+          <Checkbox className="text-sm text-slate-700">
+            Mark this item as already found
+          </Checkbox>
         </Form.Item>
       </Form>
     </Modal>

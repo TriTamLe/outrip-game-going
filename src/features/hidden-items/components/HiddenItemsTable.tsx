@@ -57,6 +57,20 @@ export function HiddenItemsTable({
       ),
     },
     {
+      title: 'Status',
+      dataIndex: 'isFound',
+      key: 'isFound',
+      width: 130,
+      render: (isFound: boolean) => (
+        <Tag
+          className="!mr-0"
+          color={isFound ? 'success' : 'default'}
+        >
+          {isFound ? 'Found' : 'Hidden'}
+        </Tag>
+      ),
+    },
+    {
       title: 'Actions',
       key: 'actions',
       fixed: 'right',
@@ -130,6 +144,19 @@ export function HiddenItemsTable({
                     }`}
                   >
                     {record.score > 0 ? `+${record.score}` : record.score}
+                  </Typography.Text>
+                </div>
+
+                <div className="grid gap-1 rounded-[16px] bg-slate-100/80 px-3 py-3">
+                  <Typography.Text className="text-[0.68rem] font-semibold tracking-[0.14em] text-slate-500 uppercase">
+                    Status
+                  </Typography.Text>
+                  <Typography.Text
+                    className={`text-[1rem] font-medium ${
+                      record.isFound ? 'text-emerald-700' : 'text-slate-700'
+                    }`}
+                  >
+                    {record.isFound ? 'Found' : 'Hidden'}
                   </Typography.Text>
                 </div>
               </div>

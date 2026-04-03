@@ -5,6 +5,7 @@ export type HiddenItemRecord = {
   name: string
   description?: string
   score: number
+  isFound: boolean
   order: number
 }
 
@@ -12,4 +13,5 @@ export type HiddenItemFormValues = {
   name: string
   description?: string
   score: number
+  isFound: boolean
 }

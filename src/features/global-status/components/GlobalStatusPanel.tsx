@@ -7,6 +7,7 @@ import { teamMeta } from '../../team-scoreboard/teamMeta.ts'
 const gameLabels = {
   'in-game:posture': 'Tâm Đầu Ý Hợp',
   'in-game:vienamese': 'Tiếng Tây Tiếng Ta',
+  'in-game:kind-hunt': 'Cuộc Đi Săn Đầy Yêu Thương',
   'rule:posture': 'Rule · Tâm Đầu Ý Hợp',
   'rule:vienamese': 'Rule · Tiếng Tây Tiếng Ta',
   'rule:async-battle': 'Rule · Cuộc đấu Bất đồng bộ',
@@ -86,6 +87,10 @@ export function GlobalStatusPanel({
         ) : isRule ? (
           <Typography.Text className="text-sm text-slate-600">
             The presentation screen is showing the rule sheet.
+          </Typography.Text>
+        ) : status.value === 'in-game:kind-hunt' ? (
+          <Typography.Text className="text-sm text-slate-600">
+            The hidden item hunt is currently running.
           </Typography.Text>
         ) : (
           <div className="flex flex-wrap gap-2">

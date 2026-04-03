@@ -40,7 +40,8 @@ function HiddenItemsPage() {
           </Typography.Title>
           <Typography.Paragraph className="!mt-4 !mb-0 max-w-[62ch] !text-[0.98rem] !leading-7 !text-slate-700 sm:!text-base sm:!leading-8">
             Each item stores a name, an optional description, and a score that
-            can be positive or negative.
+            can be positive or negative, together with whether it has already
+            been found.
           </Typography.Paragraph>
         </div>
 

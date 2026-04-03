@@ -1,3 +1,5 @@
+import { KindHuntPresentOverlay } from '../features/hidden-items/components/KindHuntPresentOverlay.tsx'
+import { useKindHuntGame } from '../features/hidden-items/hooks/useKindHuntGame.ts'
 import { PosturePresentOverlay } from '../features/posture-game/components/PosturePresentOverlay.tsx'
 import { usePostureGame } from '../features/posture-game/hooks/usePostureGame.ts'
 import { RulePresentOverlay } from '../features/rules/components/RulePresentOverlay.tsx'
@@ -11,6 +13,8 @@ import { useVienameseGame } from '../features/vienamese-game/hooks/useVienameseG
 function PresentPage() {
   const { teams } = useTeamScores()
   const { activeWord, isPostureActive, showMembersOnPresent } = usePostureGame()
+  const { isKindHuntActive, remainingCount: hiddenItemsRemainingCount } =
+    useKindHuntGame()
   const { activeRuleGame, activeRule, isRuleMode } = useRuleStatus()
   const {
     isVienameseActive,
@@ -49,6 +53,12 @@ function PresentPage() {
 
           {isPostureActive && activeWord ? (
             <PosturePresentOverlay word={activeWord} />
+          ) : null}
+
+          {isKindHuntActive ? (
+            <KindHuntPresentOverlay
+              remainingCount={hiddenItemsRemainingCount}
+            />
           ) : null}
 
           {isRuleMode && activeRuleGame ? (

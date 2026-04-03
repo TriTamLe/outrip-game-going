@@ -11,6 +11,7 @@ import { teamValidator, type TeamKey } from './team'
 export const globalGameValidator = v.union(
   v.literal('in-game:posture'),
   v.literal('in-game:vienamese'),
+  v.literal('in-game:kind-hunt'),
   v.literal('rule:posture'),
   v.literal('rule:vienamese'),
   v.literal('rule:async-battle'),
@@ -57,6 +58,9 @@ export const globalStatusValidator = v.union(
     phase: postureGamePhaseValidator,
   }),
   v.object({
+    value: v.literal('in-game:kind-hunt'),
+  }),
+  v.object({
     value: v.literal('in-game:vienamese'),
     team: teamValidator,
     phase: vienameseGamePhaseValidator,
@@ -68,6 +72,7 @@ export const globalStatusKey = 'global'
 export type GlobalGame =
   | 'in-game:posture'
   | 'in-game:vienamese'
+  | 'in-game:kind-hunt'
   | 'rule:posture'
   | 'rule:vienamese'
   | 'rule:async-battle'
@@ -99,6 +104,9 @@ export type GlobalStatus =
   | {
       value: 'in-game:posture'
       phase: PostureGamePhase
+    }
+  | {
+      value: 'in-game:kind-hunt'
     }
   | {
       value: 'in-game:vienamese'
@@ -170,6 +178,9 @@ export const setInGame = mutation({
         phase: postureGamePhaseValidator,
       }),
       v.object({
+        value: v.literal('in-game:kind-hunt'),
+      }),
+      v.object({
         value: v.literal('in-game:vienamese'),
         team: teamValidator,
         phase: vienameseGamePhaseValidator,
@@ -192,7 +203,8 @@ export const toggleRule = mutation({
 
     if (
       currentStatus.value === 'in-game:posture' ||
-      currentStatus.value === 'in-game:vienamese'
+      currentStatus.value === 'in-game:vienamese' ||
+      currentStatus.value === 'in-game:kind-hunt'
     ) {
       throw new Error('A game is already active.')
     }

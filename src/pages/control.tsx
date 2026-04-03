@@ -1,4 +1,5 @@
 import {
+  AppstoreOutlined,
   BookOutlined,
   HomeOutlined,
   EyeInvisibleOutlined,
@@ -6,6 +7,8 @@ import {
 } from '@ant-design/icons'
 import { useNavigate } from '@tanstack/react-router'
 import { Affix, Button, Collapse } from 'antd'
+import { InGameKindHuntModule } from '../features/hidden-items/components/InGameKindHuntModule.tsx'
+import { useKindHuntGame } from '../features/hidden-items/hooks/useKindHuntGame.ts'
 import { useState } from 'react'
 import { InGamePostureModule } from '../features/posture-game/components/InGamePostureModule.tsx'
 import { usePostureGame } from '../features/posture-game/hooks/usePostureGame.ts'
@@ -38,6 +41,16 @@ function ControlPage() {
     selectActiveWord,
     clearActiveWord,
   } = usePostureGame()
+  const {
+    isKindHuntActive,
+    isLoading: isKindHuntLoading,
+    isTogglingSession: isTogglingKindHunt,
+    updatingId: updatingKindHuntId,
+    items: hiddenItems,
+    remainingCount: hiddenItemsRemainingCount,
+    toggleKindHuntGame,
+    toggleFound,
+  } = useKindHuntGame()
   const {
     status,
     isVienameseActive,
@@ -73,10 +86,15 @@ function ControlPage() {
     status === undefined ||
     (status.value !== 'idle' && status.value !== 'in-game:posture') ||
     isStartingVienamese
+  const kindHuntToggleDisabled =
+    status === undefined ||
+    (status.value !== 'idle' && status.value !== 'in-game:kind-hunt') ||
+    isStartingVienamese
   const ruleButtonsDisabled =
     status === undefined ||
     status.value === 'in-game:posture' ||
-    status.value === 'in-game:vienamese'
+    status.value === 'in-game:vienamese' ||
+    status.value === 'in-game:kind-hunt'
   const playTtttDisabled =
     status === undefined ||
     status.value !== 'idle' ||
@@ -98,7 +116,9 @@ function ControlPage() {
         ? `Rule · ${ruleMetaByStatus[activeRuleStatus].name}`
         : status.value === 'in-game:posture'
           ? 'In-game · Tâm Đầu Ý Hợp'
-          : 'In-game · Tiếng Tây Tiếng Ta'
+          : status.value === 'in-game:kind-hunt'
+            ? 'In-game · Cuộc Đi Săn Đầy Yêu Thương'
+            : 'In-game · Tiếng Tây Tiếng Ta'
   const markers = getTeamMarkers(teams)
   const ruleCollapseItems = [
     {
@@ -192,15 +212,31 @@ function ControlPage() {
             ) : null}
 
             {!isAffixed ? (
-              <Button
-                className="!h-12 !rounded-2xl !font-semibold"
-                disabled={postureToggleDisabled}
-                loading={isToggling}
-                onClick={() => void togglePostureGame()}
-                type={isPostureActive ? 'default' : 'primary'}
-              >
-                {isPostureActive ? 'Stop Tâm Đầu Ý Hợp' : 'Start Tâm Đầu Ý Hợp'}
-              </Button>
+              <div className="grid gap-2 sm:grid-cols-2">
+                <Button
+                  className="!h-12 !rounded-2xl !font-semibold"
+                  disabled={postureToggleDisabled}
+                  loading={isToggling}
+                  onClick={() => void togglePostureGame()}
+                  type={isPostureActive ? 'default' : 'primary'}
+                >
+                  {isPostureActive
+                    ? 'Stop Tâm Đầu Ý Hợp'
+                    : 'Start Tâm Đầu Ý Hợp'}
+                </Button>
+                <Button
+                  className="!h-12 !rounded-2xl !font-semibold"
+                  disabled={kindHuntToggleDisabled}
+                  icon={<AppstoreOutlined />}
+                  loading={isTogglingKindHunt}
+                  onClick={() => void toggleKindHuntGame()}
+                  type={isKindHuntActive ? 'default' : 'primary'}
+                >
+                  {isKindHuntActive
+                    ? 'Stop Cuộc Đi Săn'
+                    : 'Start Cuộc Đi Săn'}
+                </Button>
+              </div>
             ) : null}
           </div>
         </div>
@@ -214,6 +250,16 @@ function ControlPage() {
           onSelectWord={selectActiveWord}
           phase={posturePhase}
           words={words}
+        />
+      ) : null}
+
+      {isKindHuntActive && !isKindHuntLoading ? (
+        <InGameKindHuntModule
+          disabled={updatingKindHuntId !== null}
+          items={hiddenItems}
+          onToggleFound={toggleFound}
+          remainingCount={hiddenItemsRemainingCount}
+          updatingId={updatingKindHuntId}
         />
       ) : null}
 

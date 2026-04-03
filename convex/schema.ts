@@ -21,6 +21,7 @@ export default defineSchema({
     name: v.string(),
     description: v.optional(v.string()),
     score: v.number(),
+    isFound: v.optional(v.boolean()),
     order: v.number(),
   })
     .index('by_name', ['name'])
