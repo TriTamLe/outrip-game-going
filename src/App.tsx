@@ -11,6 +11,7 @@ import IndexPage from './pages/index.tsx'
 import PostureWordsPage from './pages/posture-words.tsx'
 import PresentPage from './pages/present.tsx'
 import RulesPage from './pages/rules.tsx'
+import TeamMembersPage from './pages/team-members.tsx'
 
 function RootLayout() {
   return (
@@ -48,6 +49,12 @@ const rulesRoute = createRoute({
   component: RulesPage,
 })
 
+const teamMembersRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/team-members',
+  component: TeamMembersPage,
+})
+
 const presentRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/present',
@@ -65,6 +72,7 @@ const routeTree = rootRoute.addChildren([
   idiomsRoute,
   postureWordsRoute,
   rulesRoute,
+  teamMembersRoute,
   presentRoute,
   controlRoute,
 ])

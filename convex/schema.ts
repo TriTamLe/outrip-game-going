@@ -57,4 +57,12 @@ export default defineSchema({
     name: v.string(),
     score: v.number(),
   }).index('by_key', ['key']),
+  teamMembers: defineTable({
+    teamKey: teamValidator,
+    name: v.string(),
+    isLeader: v.boolean(),
+    order: v.number(),
+  })
+    .index('by_team_order', ['teamKey', 'order'])
+    .index('by_team_name', ['teamKey', 'name']),
 })

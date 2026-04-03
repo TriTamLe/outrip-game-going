@@ -2,6 +2,7 @@ import {
   ArrowRightOutlined,
   BookOutlined,
   FileTextOutlined,
+  TeamOutlined,
   TranslationOutlined,
 } from '@ant-design/icons'
 import { useNavigate } from '@tanstack/react-router'
@@ -112,6 +113,14 @@ function IndexPage() {
                   size="large"
                 >
                   Open rules
+                </Button>
+                <Button
+                  className="!h-12 !rounded-2xl !border-slate-200 !bg-white !px-5 !font-semibold !text-slate-800 hover:!border-slate-300 hover:!text-slate-950"
+                  icon={<TeamOutlined />}
+                  onClick={() => void navigate({ to: '/team-members' })}
+                  size="large"
+                >
+                  Open team members
                 </Button>
               </div>
             </section>
