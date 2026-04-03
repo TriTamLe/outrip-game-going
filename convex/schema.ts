@@ -17,6 +17,14 @@ export default defineSchema({
   })
     .index('by_text', ['text'])
     .index('by_order', ['order']),
+  hiddenItems: defineTable({
+    name: v.string(),
+    description: v.optional(v.string()),
+    score: v.number(),
+    order: v.number(),
+  })
+    .index('by_name', ['name'])
+    .index('by_order', ['order']),
   rules: defineTable({
     game: ruleGameValidator,
     markdown: v.string(),

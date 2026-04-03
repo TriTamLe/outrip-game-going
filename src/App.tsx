@@ -6,6 +6,7 @@ import {
   createRouter,
 } from '@tanstack/react-router'
 import ControlPage from './pages/control.tsx'
+import HiddenItemsPage from './pages/hidden-items.tsx'
 import IdiomsPage from './pages/idioms.tsx'
 import IndexPage from './pages/index.tsx'
 import PostureWordsPage from './pages/posture-words.tsx'
@@ -35,6 +36,12 @@ const idiomsRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/idioms',
   component: IdiomsPage,
+})
+
+const hiddenItemsRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/hidden-items',
+  component: HiddenItemsPage,
 })
 
 const postureWordsRoute = createRoute({
@@ -70,6 +77,7 @@ const controlRoute = createRoute({
 const routeTree = rootRoute.addChildren([
   indexRoute,
   idiomsRoute,
+  hiddenItemsRoute,
   postureWordsRoute,
   rulesRoute,
   teamMembersRoute,

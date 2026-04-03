@@ -1,4 +1,5 @@
 import {
+  AppstoreOutlined,
   ArrowRightOutlined,
   BookOutlined,
   FileTextOutlined,
@@ -97,6 +98,14 @@ function IndexPage() {
                   size="large"
                 >
                   Open idioms
+                </Button>
+                <Button
+                  className="!h-12 !rounded-2xl !border-slate-200 !bg-white !px-5 !font-semibold !text-slate-800 hover:!border-slate-300 hover:!text-slate-950"
+                  icon={<AppstoreOutlined />}
+                  onClick={() => void navigate({ to: '/hidden-items' })}
+                  size="large"
+                >
+                  Open hidden items
                 </Button>
                 <Button
                   className="!h-12 !rounded-2xl !border-slate-200 !bg-white !px-5 !font-semibold !text-slate-800 hover:!border-slate-300 hover:!text-slate-950"

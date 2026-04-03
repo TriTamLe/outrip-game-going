@@ -9,6 +9,7 @@
  */
 
 import type * as globalStatus from "../globalStatus.js";
+import type * as hiddenItems from "../hiddenItems.js";
 import type * as idiomStatus from "../idiomStatus.js";
 import type * as idioms from "../idioms.js";
 import type * as postureGame from "../postureGame.js";
@@ -27,6 +28,7 @@ import type {
 
 declare const fullApi: ApiFromModules<{
   globalStatus: typeof globalStatus;
+  hiddenItems: typeof hiddenItems;
   idiomStatus: typeof idiomStatus;
   idioms: typeof idioms;
   postureGame: typeof postureGame;
