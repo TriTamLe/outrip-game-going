@@ -192,30 +192,31 @@ export function TeamBoard({
             ) : null}
           </div>
         ) : (
-          <div className="flex items-end justify-between gap-3">
+          <div className="flex items-end gap-3">
             <div className="min-w-0 flex-1">
               <Statistic
                 className="!text-slate-900"
                 formatter={() => (
                   <span
-                    className={`inline-flex items-end gap-2 leading-none font-medium text-slate-900 ${variantClasses.score}`}
+                    className={`inline-flex items-end gap-2 leading-none text-slate-900 ${variantClasses.score}`}
                   >
-                    <span>{team.score ?? 0}</span>
+                    <span className="font-medium">{team.score ?? 0}</span>
                     <span className="text-[0.36em] leading-none">🌸</span>
+                    {isComboControl &&
+                    !hideControlButtons &&
+                    comboScore !== 0 ? (
+                      <span
+                        className={`pb-[0.28em] text-[0.5em] leading-none font-medium select-none ${comboScoreClassName}`}
+                      >
+                        {comboScoreText}
+                      </span>
+                    ) : null}
                   </span>
                 )}
                 loading={team.score === null}
                 value={team.score ?? 0}
               />
             </div>
-
-            {isComboControl && !hideControlButtons && comboScore !== 0 ? (
-              <Typography.Text
-                className={`pb-1 text-xs font-medium ${comboScoreClassName}`}
-              >
-                Combo {comboScoreText}
-              </Typography.Text>
-            ) : null}
           </div>
         )}
 
